@@ -3,12 +3,11 @@ import cors from "cors";
 import { z } from "zod";
 import {UserSchema} from "./types/user";
 import jsonwebtoken from "jsonwebtoken";
-import { PrismaClient } from "@prisma/client";
+import {prisma} from "@repo/db/src/index";
 import {middleware} from "./Middleware/middleware";
 import {RoomSchema} from "./types/room";
 
 const app = express()
-const prisma = new PrismaClient()
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 app.use(cors())

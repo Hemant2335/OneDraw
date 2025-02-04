@@ -21,7 +21,9 @@
     "packages/*"
   ],
   "dependencies": {
+    "@repo/db": "^1.0.0",
     "@types/express": "^5.0.0",
-    "express": "^4.21.2"
+    "express": "^4.21.2",
+    "ws": "^8.18.0"
   }
 }
