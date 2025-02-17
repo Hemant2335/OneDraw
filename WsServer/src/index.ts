@@ -83,9 +83,9 @@ wss.on("connection" , (ws , request)=>{
 
 
         if(data.type === "msg"){
-            const  roomId = data.roomId;
+            const  roomId = parseInt(data.roomID);
             const userId = users.find((el => el.ws === ws))?.userId;
-            const message = data.message;
+            const message = JSON.stringify(data.shape);
             if(!userId){
                 return ;
             }

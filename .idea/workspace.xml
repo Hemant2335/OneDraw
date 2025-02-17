@@ -5,20 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="e111901c-88b2-4201-afa9-c5cd60f320ee" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/backend/Dockerfile" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/material_theme_project_new.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/material_theme_project_new.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Frontend/Classes/signalingManager.ts" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/Classes/signalingManager.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Frontend/Components/Whiteboard.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/Components/Whiteboard.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Frontend/app/Whiteboard/[roomId]/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/app/Whiteboard/[roomId]/page.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Frontend/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Frontend/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Frontend/utils/getShapes.ts" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/utils/getShapes.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/WsServer/dist/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/WsServer/dist/index.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/WsServer/src/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/WsServer/src/index.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/dist/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/backend/dist/index.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/backend/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/index.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -91,7 +80,7 @@
       <workItem from="1738754689501" duration="2397000" />
       <workItem from="1738830763318" duration="8458000" />
       <workItem from="1738904759164" duration="2161000" />
-      <workItem from="1739795484586" duration="6198000" />
+      <workItem from="1739795484586" duration="8771000" />
     </task>
     <servers />
   </component>

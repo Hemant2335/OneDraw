@@ -82,9 +82,9 @@ wss.on("connection", (ws, request) => {
             user.rooms = user === null || user === void 0 ? void 0 : user.rooms.filter((el => el !== data.roomId));
         }
         if (data.type === "msg") {
-            const roomId = data.roomId;
+            const roomId = parseInt(data.roomID);
             const userId = (_a = users.find((el => el.ws === ws))) === null || _a === void 0 ? void 0 : _a.userId;
-            const message = data.message;
+            const message = JSON.stringify(data.shape);
             if (!userId) {
                 return;
             }
