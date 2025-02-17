@@ -3,7 +3,9 @@ import {WebSocketServer , WebSocket} from "ws"
 import jwt from "jsonwebtoken";
 import {PrismaClient} from "@prisma/client";
 
-const wss = new WebSocketServer({port:8080});
+const wss = new WebSocketServer({port:8080} ,()=>{
+    console.log("Websocket Server Started");
+});
 
 interface User {
     userId : string,
@@ -20,8 +22,7 @@ const CheckUser = (token : string) =>{
         if(typeof decoded === "string"){
             return null;
         }
-
-        if(!decoded || !decoded.Id){
+        if(!decoded || !decoded.id){
             return null;
         }
 
@@ -42,8 +43,8 @@ wss.on("connection" , (ws , request)=>{
         const queryParams = new URLSearchParams(url.split('?')[1]);
         const token = queryParams.get("token") || " ";
         const userId = CheckUser(token);
-
         if(!userId){
+            console.log("No UserId found");
             ws.close();
             return;
         }
@@ -53,8 +54,10 @@ wss.on("connection" , (ws , request)=>{
             ws: ws,
             rooms: []
         }
+        console.log("Got New Connection" , userId);
         users.push(newUser);
     }catch (e) {
+        console.log(e);
         return ws.close();
     }
     ws.on("message" , async (message)=>{

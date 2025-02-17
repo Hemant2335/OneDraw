@@ -1,27 +1,49 @@
+"use client"
+
 import {signalingManager} from "@/Classes/signalingManager";
-import {useEffect, useState} from "react";
-import {useRouter} from "next/router";
+import React, {useEffect, useRef, useState} from "react";
+import {DrawHandler} from "@/Classes/DrawHandler";
 
-const Whiteboard = () =>{
+const Whiteboard : React.FC<{roomId : string}> = ({roomId}) =>{
     const [Instance, setInstance] = useState<signalingManager | null>(null);
-    const router = useRouter();
-
+    const [drawHandler, setDrawHandler] = useState<DrawHandler | null>(null);
+    const [tool, setTool] = useState<"pen" | "circle" | "rect">("rect");
+    const canvasRef = useRef<HTMLCanvasElement>(null);
     useEffect(() => {
-        const roomId = router.query.roomId as string;
         if(!roomId){
             return;
         }
-
+        console.log("I am Running" , roomId);
         setInstance(signalingManager.getInstance(roomId));
 
         return () => {
             signalingManager.closeConnection();
         }
-    }, [router]);
+    }, []);
+    
+    useEffect(() => {
+        console.log("Selected Tool" , roomId);
+        drawHandler?.selectTool(tool);
+    }, []);
+
+    useEffect(() => {
+        if(!canvasRef.current){
+            return;
+        }
+        if(!Instance){
+            return;
+        }
+        setDrawHandler(new DrawHandler(canvasRef.current, roomId, Instance.ws));
+        console.log("Draw" , roomId);
+        return () => {
+            drawHandler?.clearCanvas();
+        }
+    }, [canvasRef , roomId , Instance]);
+    
 
     return (
-        <div>
-            <h1>Whiteboard</h1>
+        <div className="w-[100vw] h-[100vh] ">
+            <canvas ref={canvasRef} id={"whiteboard"} width={window.innerWidth} height={window.innerHeight}/>
         </div>
     )
 

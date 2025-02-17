@@ -47,6 +47,7 @@ app.post("/signUp", (req, res) => __awaiter(void 0, void 0, void 0, function* ()
         return res.status(200).json({ message: "User Created Successfully" });
     }
     catch (e) {
+        console.log(e);
         return res.status(500).json({ error: "Internal Server Error" });
     }
 }));
@@ -129,6 +130,9 @@ app.get("/getRoom/:slug", (req, res) => __awaiter(void 0, void 0, void 0, functi
         return res.status(500).json({ error: "Internal Server Error" });
     }
 }));
+app.get("/", (req, res) => {
+    return res.send("Hello World");
+});
 app.listen(3000, () => {
     console.log("Server is running on port 3000");
 });

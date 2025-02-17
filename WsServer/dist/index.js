@@ -15,7 +15,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const ws_1 = require("ws");
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const client_1 = require("@prisma/client");
-const wss = new ws_1.WebSocketServer({ port: 8080 });
+const wss = new ws_1.WebSocketServer({ port: 8080 }, () => {
+    console.log("Websocket Server Started");
+});
 const users = [];
 const prisma = new client_1.PrismaClient();
 const CheckUser = (token) => {
@@ -24,7 +26,7 @@ const CheckUser = (token) => {
         if (typeof decoded === "string") {
             return null;
         }
-        if (!decoded || !decoded.Id) {
+        if (!decoded || !decoded.id) {
             return null;
         }
         return decoded.id;
@@ -43,6 +45,7 @@ wss.on("connection", (ws, request) => {
         const token = queryParams.get("token") || " ";
         const userId = CheckUser(token);
         if (!userId) {
+            console.log("No UserId found");
             ws.close();
             return;
         }
@@ -51,9 +54,11 @@ wss.on("connection", (ws, request) => {
             ws: ws,
             rooms: []
         };
+        console.log("Got New Connection", userId);
         users.push(newUser);
     }
     catch (e) {
+        console.log(e);
         return ws.close();
     }
     ws.on("message", (message) => __awaiter(void 0, void 0, void 0, function* () {

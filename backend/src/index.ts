@@ -35,6 +35,7 @@ app.post("/signUp" , async(req , res) : Promise<any> =>{
         })
         return res.status(200).json({message: "User Created Successfully"})
     }catch (e) {
+        console.log(e);
         return  res.status(500).json({error: "Internal Server Error"})
     }
 })
@@ -120,6 +121,10 @@ app.get("/getRoom/:slug" , async (req , res) : Promise<any> =>{
     }catch (e) {
         return res.status(500).json({error: "Internal Server Error"})
     }
+})
+
+app.get("/" , (req, res) : any =>{
+    return  res.send("Hello World") ;
 })
 
 app.listen(3000, () => {

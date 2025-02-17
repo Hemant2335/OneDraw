@@ -1,4 +1,7 @@
-import {useRouter} from "next/router";
+"use client"
+
+import {useRouter} from "next/navigation";
+import Whiteboard from "@/Components/Whiteboard";
 
 
 const WhiteboardPage = () => {
@@ -7,7 +10,7 @@ const WhiteboardPage = () => {
 
     return (
         <div>
-            WhiteBoard
+            <Whiteboard roomId={"1"}/>
         </div>
     )
 }
