@@ -3,11 +3,12 @@
 import {signalingManager} from "@/Classes/signalingManager";
 import React, {useEffect, useRef, useState} from "react";
 import {DrawHandler} from "@/Classes/DrawHandler";
+import {ToolBar, Tooltype} from "@/Components/ToolBar";
 
 const Whiteboard : React.FC<{roomId : string}> = ({roomId}) =>{
     const [Instance, setInstance] = useState<signalingManager | null>(null);
     const [drawHandler, setDrawHandler] = useState<DrawHandler | null>(null);
-    const [tool, setTool] = useState<"pen" | "circle" | "rect">("rect");
+    const [tool, setTool] = useState<Tooltype>("rect");
     const canvasRef = useRef<HTMLCanvasElement>(null);
     useEffect(() => {
         if(!roomId){
@@ -43,6 +44,7 @@ const Whiteboard : React.FC<{roomId : string}> = ({roomId}) =>{
 
     return (
         <div className="w-[100vw] h-[100vh] ">
+            <ToolBar drawHandler={drawHandler} setTool={setTool} tool={tool}/>
             <canvas ref={canvasRef} id={"whiteboard"} width={window.innerWidth} height={window.innerHeight}/>
         </div>
     )

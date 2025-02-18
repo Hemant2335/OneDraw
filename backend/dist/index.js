@@ -23,7 +23,11 @@ const room_1 = require("./types/room");
 const app = (0, express_1.default)();
 app.use(express_1.default.json());
 app.use(express_1.default.urlencoded({ extended: true }));
-app.use((0, cors_1.default)());
+app.use((0, cors_1.default)({
+    credentials: true,
+    origin: ["https://monitordevices.vercel.app", "http://localhost:3001"],
+    allowedHeaders: ["Content-Type", "authorization"],
+}));
 const prisma = new client_1.PrismaClient();
 // Sign In Types
 const signInType = zod_1.z.object({

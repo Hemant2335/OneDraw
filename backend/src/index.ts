@@ -10,7 +10,11 @@ import {RoomSchema} from "./types/room";
 const app = express()
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
-app.use(cors())
+app.use(cors({
+    credentials: true,
+    origin: ["https://monitordevices.vercel.app", "http://localhost:3001"],
+    allowedHeaders: ["Content-Type", "authorization"],
+}));
 const prisma = new PrismaClient();
 // Sign In Types
 const signInType = z.object({
