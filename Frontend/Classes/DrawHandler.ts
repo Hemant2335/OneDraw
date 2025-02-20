@@ -82,6 +82,7 @@ export class DrawHandler {
 
     async init() : Promise<void>{
         this.shapes = await getShapes();
+        console.log(this.shapes , "Shapes");
         this.clearCanvas();
         return ;
     }
@@ -97,8 +98,10 @@ export class DrawHandler {
    initHandler(){
         this.socket.onmessage = async (event) => {
             const data = JSON.parse(event.data);
+            console.log("Message Recived" , data);
+            const shape = JSON.parse(data.message);
             if(data.type === "msg"){
-                this.shapes.push(data.shape);
+                this.shapes.push(shape);
                 this.clearCanvas();
             }
         }

@@ -1,6 +1,6 @@
 import express from "express"
 import cors from "cors";
-import { z } from "zod";
+import {z} from "zod";
 import {UserSchema} from "./types/user";
 import jsonwebtoken from "jsonwebtoken";
 import {PrismaClient} from "@prisma/client";
@@ -83,7 +83,7 @@ app.post('/createRoom' , middleware , async (req , res) : Promise<any> => {
                 adminId: req.body.userId
             }
         })
-        return res.status(200).json({message: "Room Created Successfully"})
+        return res.status(200).json({room : room})
     }catch (e) {
         return res.status(500).json({error: "Internal Server Error"})
     }

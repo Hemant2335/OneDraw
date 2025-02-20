@@ -70,6 +70,7 @@ wss.on("connection" , (ws , request)=>{
 
         if(data.type === "joinRoom"){
            const user = users.find((el => el.ws === ws));
+           console.log("joinroom" , user , data);
            user?.rooms.push(data.roomId);
         }
 
@@ -96,9 +97,9 @@ wss.on("connection" , (ws , request)=>{
                     message: message
                 }
             })
-
+            console.log(users , "RoomID" , data.roomID);
             users.forEach((el)=>{
-                if(el.rooms.includes(data.room)){
+                if(el.rooms.includes(data.roomID)){
                     el.ws.send(JSON.stringify({
                         type: "msg",
                         message: message,

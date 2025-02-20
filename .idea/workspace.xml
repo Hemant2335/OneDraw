@@ -5,8 +5,21 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="e111901c-88b2-4201-afa9-c5cd60f320ee" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/Frontend/app/Signin/layout.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Frontend/app/Signup/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/app/Signup/page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Frontend/Classes/DrawHandler.ts" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/Classes/DrawHandler.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Frontend/Classes/signalingManager.ts" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/Classes/signalingManager.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Frontend/Components/Navbar.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/Components/Navbar.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Frontend/app/globals.css" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/app/globals.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Frontend/app/layout.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/app/layout.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Frontend/app/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/app/page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Frontend/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Frontend/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Frontend/tailwind.config.ts" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/tailwind.config.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Frontend/utils/getShapes.ts" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/utils/getShapes.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/WsServer/dist/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/WsServer/dist/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/WsServer/src/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/WsServer/src/index.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/index.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -36,6 +49,9 @@
     &quot;accountId&quot;: &quot;133cf7fe-e173-4d1e-9ba5-41701491355c&quot;
   }
 }</component>
+  <component name="OptimizeOnSaveOptions">
+    <option name="myRunOnSave" value="true" />
+  </component>
   <component name="ProjectColorInfo">{
   &quot;customColor&quot;: &quot;&quot;,
   &quot;associatedIndex&quot;: 3
@@ -45,22 +61,24 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;dart.analysis.tool.window.visible&quot;: &quot;false&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;dev&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;settings.sync&quot;,
-    &quot;ts.external.directory.path&quot;: &quot;E:\\OneDraw\\Frontend\\node_modules\\typescript\\lib&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "dart.analysis.tool.window.visible": "false",
+    "git-widget-placeholder": "dev",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "prettierjs.PrettierConfiguration.Package": "C:\\Users\\knrt7\\AppData\\Roaming\\npm\\node_modules\\prettier",
+    "rearrange.code.on.save": "true",
+    "settings.editor.selected.configurable": "settings.typescriptcompiler",
+    "ts.external.directory.path": "E:\\OneDraw\\Frontend\\node_modules\\typescript\\lib",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
       <recent name="E:\OneDraw\Frontend\assets" />
@@ -85,7 +103,9 @@
       <workItem from="1738830763318" duration="8458000" />
       <workItem from="1738904759164" duration="2161000" />
       <workItem from="1739795484586" duration="10501000" />
-      <workItem from="1739852917313" duration="12103000" />
+      <workItem from="1739852917313" duration="18341000" />
+      <workItem from="1739947853577" duration="5297000" />
+      <workItem from="1739961645535" duration="3252000" />
     </task>
     <servers />
   </component>

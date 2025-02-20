@@ -11,11 +11,14 @@ export default {
       colors: {
         background: "var(--background)",
         foreground: "var(--foreground)",
+        primary: "#EA4B8B",
       },
       boxShadow : {
         "3xl" : "box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px"
       }
     },
   },
-  plugins: [],
+  plugins: [
+    require('daisyui'),
+  ],
 } satisfies Config;
