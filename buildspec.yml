@@ -32,7 +32,7 @@ phases:
       - docker build -t $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$ECR_REPO_FRONTEND:$IMAGE_TAG .
       - cd ..
 
-      - echo "Building Backend Docker image..."
+      - echo "Building backend Docker image..."
       - cd Backend
       - docker build -t $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$ECR_REPO_BACKEND:$IMAGE_TAG .
       - cd ..
