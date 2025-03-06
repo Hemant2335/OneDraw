@@ -74,7 +74,7 @@ const Navbar = () => {
                 Pricing
               </li>
               <li className="hover:text-[#097969] cursor-pointer transition-transform nav-About">
-                Contact
+                Contact Us
               </li>
             </ul>
           </div>
