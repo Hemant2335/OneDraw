@@ -51,9 +51,7 @@ phases:
       - docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$ECR_REPO_WEBSOCKET:$IMAGE_TAG
 
       - echo "Updating Kubernetes manifests with new image tags..."
-      - sed -i "s|image:.*|image: $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$ECR_REPO_FRONTEND:$IMAGE_TAG|g" frontend/k8s/deployment.yaml
-      - sed -i "s|image:.*|image: $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$ECR_REPO_BACKEND:$IMAGE_TAG|g" backend/k8s/deployment.yaml
-      - sed -i "s|image:.*|image: $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$ECR_REPO_WEBSOCKET:$IMAGE_TAG|g" websocket/k8s/deployment.yaml
+
 
       - echo "Build and push completed successfully!"
 
