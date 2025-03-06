@@ -13,7 +13,8 @@ phases:
   install:
     commands:
       - echo "Installing dependencies..."
-      - apt-get update && apt-get install -y jq  # Install jq for JSON parsing
+      - yum update -y  # Use yum for AWS-provided images
+      - yum install -y jq  # Install jq for JSON parsing
 
   pre_build:
     commands:
