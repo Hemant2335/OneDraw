@@ -24,17 +24,17 @@ phases:
   build:
     commands:
       - echo "Building Frontend Docker image..."
-      - cd frontend
+      - cd Frontend
       - docker build -t $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$ECR_REPO_FRONTEND:$IMAGE_TAG .
       - cd ..
 
       - echo "Building Backend Docker image..."
-      - cd backend
+      - cd Backend
       - docker build -t $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$ECR_REPO_BACKEND:$IMAGE_TAG .
       - cd ..
 
       - echo "Building Websocket Docker image..."
-      - cd wsServer
+      - cd WsServer
       - docker build -t $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$ECR_REPO_WEBSOCKET:$IMAGE_TAG .
       - cd ..
 
