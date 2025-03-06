@@ -1,7 +1,8 @@
 "use client";
 import Image from "next/image";
-import { useState } from "react";
-import { useRouter } from "next/navigation";
+import {useState} from "react";
+import {useRouter} from "next/navigation";
+import banner from "@/assets/banner.jpg";
 
 const Signup = () => {
     const [Name, setName] = useState<string | null>(null);
@@ -26,8 +27,7 @@ const Signup = () => {
                 }),
                 credentials: "include",
             });
-            const data = await res.json();
-            return data;
+            return await res.json();
         } catch (error) {
             console.log(error);
             return "An error occurred";
@@ -65,7 +65,7 @@ const Signup = () => {
         <div className="flex h-screen">
             <div className="md:flex hidden cursor-pointer  text-[3vh] w-[40vw] h-screen font-bold ">
                 <Image
-                    src={require("@/assets/banner.jpg")}
+                    src={banner}
                     className=" object-cover w-full h-full"
                     alt="logo"
                 />

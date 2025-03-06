@@ -7,12 +7,14 @@ import {PrismaClient} from "@prisma/client";
 import {middleware} from "./Middleware/middleware";
 import {RoomSchema} from "./types/room";
 
+require('dotenv').config()
+
 const app = express()
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 app.use(cors({
     credentials: true,
-    origin: ["https://monitordevices.vercel.app", "http://localhost:3001"],
+    origin: ["https://monitordevices.vercel.app", "http://localhost:3000" , (process.env.FRONTEND_URL  || 'http://0.0.0.0:3000')],
     allowedHeaders: ["Content-Type", "authorization"],
 }));
 const prisma = new PrismaClient();
@@ -24,7 +26,7 @@ const signInType = z.object({
 
 
 // Sign up
-app.post("/signUp" , async(req , res) : Promise<any> =>{
+app.post("/backend/signUp" , async(req , res) : Promise<any> =>{
     const data = UserSchema.safeParse(req.body)
     if(!data.success){
         return res.status(400).json({error: data.error})
@@ -47,7 +49,7 @@ app.post("/signUp" , async(req , res) : Promise<any> =>{
 
 // SignIn
 
-app.post("/signIn" , async(req  , res) : Promise<any> =>{
+app.post("/backend/signIn" , async(req  , res) : Promise<any> =>{
     const data = signInType.safeParse(req.body)
     if(!data.success){
         return res.status(400).json({error: data.error})
@@ -65,13 +67,14 @@ app.post("/signIn" , async(req  , res) : Promise<any> =>{
         const token = jsonwebtoken.sign({id: user.id} , "secret")
         return res.status(200).json({token})
     }catch (e) {
+        console.log("Internal Server Error : " , e);
         return res.status(500).json({error: "Internal Server Error"})
     }
 })
 
 
 // Create Room
-app.post('/createRoom' , middleware , async (req , res) : Promise<any> => {
+app.post('/backend/createRoom' , middleware , async (req , res) : Promise<any> => {
     const safeData = RoomSchema.safeParse(req.body);
     if(!safeData.data){
         return res.status(400).json({error: safeData.error})
@@ -90,7 +93,7 @@ app.post('/createRoom' , middleware , async (req , res) : Promise<any> => {
 })
 
 // Get The Messages from a Room
-app.get("/getMessages/:roomId" , async (req ,res) : Promise<any> =>{
+app.get("/backend/getMessages/:roomId" , async (req ,res) : Promise<any> =>{
     const roomId = req.params.roomId;
     try{
         const messages = await prisma.chat.findMany({
@@ -110,7 +113,7 @@ app.get("/getMessages/:roomId" , async (req ,res) : Promise<any> =>{
 
 // Get The Room Details
 
-app.get("/getRoom/:slug" , async (req , res) : Promise<any> =>{
+app.get("/backend/getRoom/:slug" , async (req , res) : Promise<any> =>{
     const slug = req.params.slug;
     try{
         const room = await prisma.room.findFirst({
@@ -127,10 +130,10 @@ app.get("/getRoom/:slug" , async (req , res) : Promise<any> =>{
     }
 })
 
-app.get("/" , (req, res) : any =>{
+app.get("/backend" , (req, res) : any =>{
     return  res.send("Hello World") ;
 })
 
-app.listen(3000, () => {
-    console.log("Server is running on port 3000")
+app.listen(5000, () => {
+    console.log("Server is running on port 5000")
 })

@@ -1,10 +1,11 @@
 "use client";
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
+import {useState} from "react";
+import {useRouter} from "next/navigation";
 import Image from "next/image";
-import { User } from "@/store/atoms/User";
-import { useSetRecoilState } from "recoil";
+import {User} from "@/store/atoms/User";
+import {useSetRecoilState} from "recoil";
+import banner from "@/assets/banner.jpg";
 
 
 const SignIn = () => {
@@ -13,9 +14,12 @@ const SignIn = () => {
     const [Warning, setWarning] = useState<string | null>(null);
     const setUser = useSetRecoilState(User);
     const navigate = useRouter();
+
     const handlelogin = async () => {
         try {
-            const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/signIn`, {
+            const env = await fetch("/api/config");
+            const configenv = await env.json();
+            const res = await fetch(`${configenv.backendUrl}/signIn`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -38,7 +42,10 @@ const SignIn = () => {
             }
             setUser(data.user);
             console.log(data);
-            window.localStorage.setItem("token", data.token);
+            if(typeof window !== "undefined"){
+                localStorage.setItem("token", data.token);
+            }
+
             return navigate.push("/");
 
         } catch (error) {
@@ -51,7 +58,7 @@ const SignIn = () => {
         <div className="flex">
             <div className="md:flex hidden cursor-pointer  text-[3vh] w-[40vw] h-screen font-bold ">
                 <Image
-                    src={require("@/assets/banner.jpg")}
+                    src={banner}
                     width={500}
                     height={500}
                     className=" object-cover w-full h-full"

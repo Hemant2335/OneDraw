@@ -20,12 +20,13 @@ const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const client_1 = require("@prisma/client");
 const middleware_1 = require("./Middleware/middleware");
 const room_1 = require("./types/room");
+require('dotenv').config();
 const app = (0, express_1.default)();
 app.use(express_1.default.json());
 app.use(express_1.default.urlencoded({ extended: true }));
 app.use((0, cors_1.default)({
     credentials: true,
-    origin: ["https://monitordevices.vercel.app", "http://localhost:3001"],
+    origin: ["https://monitordevices.vercel.app", "http://localhost:3000", (process.env.FRONTEND_URL || 'http://0.0.0.0:3000')],
     allowedHeaders: ["Content-Type", "authorization"],
 }));
 const prisma = new client_1.PrismaClient();
@@ -75,6 +76,7 @@ app.post("/signIn", (req, res) => __awaiter(void 0, void 0, void 0, function* ()
         return res.status(200).json({ token });
     }
     catch (e) {
+        console.log("Internal Server Error : ", e);
         return res.status(500).json({ error: "Internal Server Error" });
     }
 }));
@@ -91,7 +93,7 @@ app.post('/createRoom', middleware_1.middleware, (req, res) => __awaiter(void 0,
                 adminId: req.body.userId
             }
         });
-        return res.status(200).json({ message: "Room Created Successfully" });
+        return res.status(200).json({ room: room });
     }
     catch (e) {
         return res.status(500).json({ error: "Internal Server Error" });
@@ -137,6 +139,6 @@ app.get("/getRoom/:slug", (req, res) => __awaiter(void 0, void 0, void 0, functi
 app.get("/", (req, res) => {
     return res.send("Hello World");
 });
-app.listen(3000, () => {
-    console.log("Server is running on port 3000");
+app.listen(5000, () => {
+    console.log("Server is running on port 5000");
 });

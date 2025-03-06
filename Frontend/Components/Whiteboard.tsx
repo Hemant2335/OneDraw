@@ -5,27 +5,26 @@ import React, {useEffect, useRef, useState} from "react";
 import {DrawHandler} from "@/Classes/DrawHandler";
 import {ToolBar, Tooltype} from "@/Components/ToolBar";
 
+
 const Whiteboard : React.FC<{roomId : string}> = ({roomId}) =>{
     const [Instance, setInstance] = useState<signalingManager | null>(null);
     const [drawHandler, setDrawHandler] = useState<DrawHandler | null>(null);
     const [tool, setTool] = useState<Tooltype>("rect");
+
     const canvasRef = useRef<HTMLCanvasElement>(null);
     useEffect(() => {
-        if(!roomId){
-            return;
-        }
         console.log("I am Running" , roomId);
         setInstance(signalingManager.getInstance(roomId));
 
         return () => {
             signalingManager.closeConnection();
         }
-    }, []);
+    }, [roomId]);
     
     useEffect(() => {
         console.log("Selected Tool" , roomId);
         drawHandler?.selectTool(tool);
-    }, []);
+    }, [drawHandler, roomId, tool]);
 
     useEffect(() => {
         if(!canvasRef.current){
@@ -39,7 +38,7 @@ const Whiteboard : React.FC<{roomId : string}> = ({roomId}) =>{
         return () => {
             drawHandler?.clearCanvas();
         }
-    }, [canvasRef , roomId , Instance]);
+    }, [drawHandler , canvasRef , roomId , Instance]);
     
 
     return (

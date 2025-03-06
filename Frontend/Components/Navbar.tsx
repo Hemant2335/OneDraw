@@ -79,7 +79,7 @@ const Navbar = () => {
             </ul>
           </div>
           <div className={`flex gap-2`}>
-            {window && window.localStorage.getItem("token") ? (
+            {(typeof window != 'undefined' && localStorage.getItem("token")) ? (
               <button onClick={()=>{handleWhiteboard()}} className="bg-primary w-fit py-3 flex items-center  px-[2vw] text-white rounded-md">
                   {isLoading ? `Loading...` : `Whiteboard`}
               </button>
