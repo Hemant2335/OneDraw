@@ -18,9 +18,13 @@ phases:
 
   pre_build:
     commands:
+      - echo "Logging in to Docker Hub..."
+      - echo "$DOCKERHUB_PASSWORD" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
+
       - echo "Logging in to Amazon ECR..."
       - aws ecr get-login-password --region ap-south-1 | docker login --username AWS --password-stdin 717279689524.dkr.ecr.ap-south-1.amazonaws.com
       - IMAGE_TAG=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)  # Correctly set IMAGE_TAG in shell
+
   build:
     commands:
       - echo "Building Frontend Docker image..."
@@ -48,8 +52,6 @@ phases:
 
       - echo "Pushing Websocket Docker image to ECR..."
       - docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$ECR_REPO_WEBSOCKET:$IMAGE_TAG
-
-      - echo "Updating Kubernetes manifests with new image tags..."
 
       - echo "Build and push completed successfully!"
 
