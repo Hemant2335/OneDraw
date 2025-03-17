@@ -24,11 +24,8 @@ phases:
       - echo "Logging in to Amazon ECR..."
       - echo "$CODEBUILD_WEBHOOK_EVENT"
       - aws ecr get-login-password --region ap-south-1 | docker login --username AWS --password-stdin 717279689524.dkr.ecr.ap-south-1.amazonaws.com
-
       - IMAGE_TAG=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
-      - if [[ "$CODEBUILD_WEBHOOK_EVENT" == "PULL_REQUEST_MERGED" ]]; then
-        IMAGE_TAG="${IMAGE_TAG}-pr-merge";
-        fi
+
 
 
   build:
