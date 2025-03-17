@@ -8,6 +8,8 @@ env:
     ECR_REPO_BACKEND: "backend"
     ECR_REPO_WEBSOCKET: "websocket"
     IMAGE_TAG: "$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)"  # Use first 7 chars of Git commit SHA
+    EKS_CLUSTER_NAME: "onedraw-cluster"  # Replace with your EKS cluster name
+    KUBECONFIG: "/root/.kube/config"  # Path to kubeconfig file
 
 phases:
   install:
@@ -15,6 +17,11 @@ phases:
       - echo "Installing dependencies..."
       - yum update -y  # Use yum for AWS-provided images
       - yum install -y jq  # Install jq for JSON parsing
+      - curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"  # Install kubectl
+      - chmod +x kubectl
+      - mv kubectl /usr/local/bin/
+      - aws --version  # Verify AWS CLI is installed
+      - kubectl version --client  # Verify kubectl is installed
 
   pre_build:
     commands:
@@ -25,8 +32,6 @@ phases:
       - echo "$CODEBUILD_WEBHOOK_EVENT"
       - aws ecr get-login-password --region ap-south-1 | docker login --username AWS --password-stdin 717279689524.dkr.ecr.ap-south-1.amazonaws.com
       - IMAGE_TAG=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
-
-
 
   build:
     commands:
@@ -57,6 +62,22 @@ phases:
       - docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$ECR_REPO_WEBSOCKET:$IMAGE_TAG
 
       - echo "Build and push completed successfully!"
+
+  deploy:
+    commands:
+      - echo "Configuring kubectl for EKS cluster..."
+      - aws eks update-kubeconfig --region $AWS_REGION --name $EKS_CLUSTER_NAME
+
+      - echo "Deploying Frontend to EKS..."
+      - kubectl apply -f manifests/frontend-deployment.yml
+
+      - echo "Deploying Backend to EKS..."
+      - kubectl apply -f manifests/backend-deployment.yml
+
+      - echo "Deploying Websocket to EKS..."
+      - kubectl apply -f manifests/websocket-deployment.yml
+
+      - echo "Deployment completed successfully!"
 
 artifacts:
   files:

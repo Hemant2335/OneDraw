@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: backend
+  template:
+    metadata:
+      labels:
+        app: backend
+    spec:
+      containers:
+        - name: backend
+          image: 717279689524.dkr.ecr.ap-south-1.amazonaws.com/backend:067f095
+          ports:
+            - containerPort: 5000
+          volumeMounts:
+            - name: backend-env-volume
+              mountPath: /src/.env
+              subPath: .env
+      volumes:
+        - name: backend-env-volume
+          configMap:
+            name: backend-config
