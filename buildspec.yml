@@ -26,9 +26,16 @@ phases:
       - aws ecr get-login-password --region ap-south-1 | docker login --username AWS --password-stdin 717279689524.dkr.ecr.ap-south-1.amazonaws.com
 
       - IMAGE_TAG=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
-      - if [[ "$CODEBUILD_WEBHOOK_EVENT" == "PULL_REQUEST_MERGED" ]]; then
-        IMAGE_TAG="${IMAGE_TAG}-pr-merge";
+      - if [[ "$CODEBUILD_WEBHOOK_EVENT" == "PULL_REQUEST_UPDATED" ]]; then
+        IMAGE_TAG="${IMAGE_TAG}-commit";
         fi
+      - if [[ "$CODEBUILD_WEBHOOK_EVENT" == "PUSH" ]]; then
+        IMAGE_TAG="${IMAGE_TAG}-push";
+        fi
+      - if [[ "$CODEBUILD_WEBHOOK_EVENT" == "PULL_REQUEST_CREATED" ]]; then
+        IMAGE_TAG="${IMAGE_TAG}-push";
+        fi
+
 
 
   build:
