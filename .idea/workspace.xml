@@ -5,6 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="e111901c-88b2-4201-afa9-c5cd60f320ee" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/manifests/backend-deployment.yml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/manifests/frontend-deployment.yml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/manifests/websocket-deployment.yml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/buildspec.yml" beforeDir="false" afterPath="$PROJECT_DIR$/buildspec.yml" afterDir="false" />
     </list>
@@ -127,7 +130,7 @@
       <workItem from="1741152999606" duration="6904000" />
       <workItem from="1741236877556" duration="6419000" />
       <workItem from="1741278789243" duration="2282000" />
-      <workItem from="1742211274663" duration="5296000" />
+      <workItem from="1742211274663" duration="8504000" />
     </task>
     <servers />
   </component>
