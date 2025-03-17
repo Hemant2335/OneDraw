@@ -26,7 +26,7 @@ phases:
       - IMAGE_TAG=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
       - if [[ "$CODEBUILD_WEBHOOK_EVENT" == "PULL_REQUEST_MERGED" ]]; then
           IMAGE_TAG="${IMAGE_TAG}-pr-merge";
-          fi
+        fi
       - echo "IMAGE_TAG: $IMAGE_TAG"
 
   build:
