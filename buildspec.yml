@@ -8,7 +8,7 @@ env:
     ECR_REPO_BACKEND: "backend"
     ECR_REPO_WEBSOCKET: "websocket"
     IMAGE_TAG: "$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)"  # Use first 7 chars of Git commit SHA
-    EKS_CLUSTER_NAME: "onedraw-cluster"  # Replace with your EKS cluster name
+    EKS_CLUSTER_NAME: "your-eks-cluster-name"  # Replace with your EKS cluster name
     KUBECONFIG: "/root/.kube/config"  # Path to kubeconfig file
 
 phases:
@@ -63,11 +63,16 @@ phases:
 
       - echo "Build and push completed successfully!"
 
+  deploy:
+    commands:
       - echo "Configuring kubectl for EKS cluster..."
       - aws eks update-kubeconfig --region $AWS_REGION --name $EKS_CLUSTER_NAME
 
+      - echo "Verifying kubectl configuration..."
+      - cat $KUBECONFIG
+
       - echo "Deploying Frontend to EKS..."
-      - kubectl apply -f manifests/frontend-deployment.yml  --validate=false
+      - kubectl apply -f manifests/frontend-deployment.yml --validate=false
 
       - echo "Deploying Backend to EKS..."
       - kubectl apply -f manifests/backend-deployment.yml --validate=false
@@ -76,7 +81,6 @@ phases:
       - kubectl apply -f manifests/websocket-deployment.yml --validate=false
 
       - echo "Deployment completed successfully!"
-
 
 artifacts:
   files:
