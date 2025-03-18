@@ -1,0 +1,117 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: backend
+  template:
+    metadata:
+      labels:
+        app: backend
+    spec:
+      containers:
+        - name: backend
+          image: 717279689524.dkr.ecr.ap-south-1.amazonaws.com/backend:067f095
+          ports:
+            - containerPort: 5000
+          volumeMounts:
+            - name: backend-env-volume
+              mountPath: /src/.env
+              subPath: .env
+      volumes:
+        - name: backend-env-volume
+          configMap:
+            name: backend-config
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: frontend
+  template:
+    metadata:
+      labels:
+        app: frontend
+    spec:
+      containers:
+        - name: frontend
+          image: 717279689524.dkr.ecr.ap-south-1.amazonaws.com/frontend:067f095
+          ports:
+            - containerPort: 3000
+          volumeMounts:
+            - name: env-volume
+              mountPath: /app/.env
+              subPath: .env
+      volumes:
+        - name: env-volume
+          configMap:
+            name: frontend-config
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: websocket
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: websocket
+  template:
+    metadata:
+      labels:
+        app: websocket
+    spec:
+      containers:
+        - name: websocket
+          image: 717279689524.dkr.ecr.ap-south-1.amazonaws.com/websocket:067f095
+          ports:
+            - containerPort: 8080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: apache-service
+  namespace: default
+spec:
+  selector:
+    app: apache
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
+  type: ClusterIP
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: web-apps-ingress
+  namespace: default
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: your-domain.com
+      http:
+        paths:
+          - path: /nginx
+            pathType: Prefix
+            backend:
+              service:
+                name: nginx-service
+                port:
+                  number: 80
+          - path: /apache
+            pathType: Prefix
+            backend:
+              service:
+                name: apache-service
+                port:
+                  number: 80
