@@ -32,6 +32,10 @@ phases:
       - echo "$CODEBUILD_WEBHOOK_EVENT"
       - aws ecr get-login-password --region ap-south-1 | docker login --username AWS --password-stdin 717279689524.dkr.ecr.ap-south-1.amazonaws.com
       - IMAGE_TAG=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
+      - echo "Configuring kubectl for EKS cluster..."
+      - aws eks update-kubeconfig --region $AWS_REGION --name $EKS_CLUSTER_NAME
+      - echo "Verifying kubectl configuration..."
+      - cat $KUBECONFIG
 
   build:
     commands:
@@ -52,22 +56,10 @@ phases:
 
   post_build:
     commands:
-      - echo "Pushing Frontend Docker image to ECR..."
-      - docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$ECR_REPO_FRONTEND:$IMAGE_TAG
-
-      - echo "Pushing Backend Docker image to ECR..."
-      - docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$ECR_REPO_BACKEND:$IMAGE_TAG
-
-      - echo "Pushing Websocket Docker image to ECR..."
-      - docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$ECR_REPO_WEBSOCKET:$IMAGE_TAG
-
-      - echo "Build and push completed successfully!"
-
-      - echo "Configuring kubectl for EKS cluster..."
-      - aws eks update-kubeconfig --region $AWS_REGION --name $EKS_CLUSTER_NAME
-
-      - echo "Verifying kubectl configuration..."
-      - cat $KUBECONFIG
+      - echo "$(aws sts get-caller-identity)"
+      - echo "$EKS_CLUSTER_NAME"
+      - echo "$AWS_REGION"
+      - aws eks describe-cluster --region $AWS_REGION --name $EKS_CLUSTER_NAME
 
       - echo "Deploying Frontend to EKS..."
       - kubectl apply -f manifests/frontend-deployment.yml --validate=false
