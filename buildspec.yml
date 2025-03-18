@@ -67,7 +67,7 @@ phases:
       - aws eks update-kubeconfig --region $AWS_REGION --name $EKS_CLUSTER_NAME
 
       - echo "Deploying Frontend to EKS..."
-      - kubectl apply -f manifests/frontend-deployment.yml --validate=false
+      - kubectl apply -f manifests/frontend-deployment.yml  --validate=false
 
       - echo "Deploying Backend to EKS..."
       - kubectl apply -f manifests/backend-deployment.yml --validate=false
