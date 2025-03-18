@@ -9,7 +9,7 @@ env:
     ECR_REPO_WEBSOCKET: "websocket"
     IMAGE_TAG: "$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)"  # Use first 7 chars of Git commit SHA
     EKS_CLUSTER_NAME: "onedraw-cluster"  # Replace with your EKS cluster name
-    KUBECONFIG: "/root/.kube/config"  # Path to kubeconfig file
+    KUBECONFIG: "/root/.kube/config"  # Path to kubeconfig fil
 
 phases:
   install:
