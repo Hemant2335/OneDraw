@@ -63,8 +63,6 @@ phases:
 
       - echo "Build and push completed successfully!"
 
-  deploy:
-    commands:
       - echo "Configuring kubectl for EKS cluster..."
       - aws eks update-kubeconfig --region $AWS_REGION --name $EKS_CLUSTER_NAME
 
@@ -81,6 +79,7 @@ phases:
       - kubectl apply -f manifests/websocket-deployment.yml --validate=false
 
       - echo "Deployment completed successfully!"
+
 
 artifacts:
   files:
