@@ -81,7 +81,7 @@ export class DrawHandler {
     }
 
     async init() : Promise<void>{
-        this.shapes = await getShapes();
+        this.shapes = await getShapes(this.roomID);
         console.log(this.shapes , "Shapes");
         this.clearCanvas();
         return ;

@@ -19,7 +19,6 @@ const user_1 = require("./types/user");
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const client_1 = require("@prisma/client");
 const middleware_1 = require("./Middleware/middleware");
-const room_1 = require("./types/room");
 require('dotenv').config();
 const app = (0, express_1.default)();
 app.use(express_1.default.json());
@@ -36,7 +35,7 @@ const signInType = zod_1.z.object({
     password: zod_1.z.string().min(8),
 });
 // Sign up
-app.post("/signUp", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+app.post("/backend/signUp", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const data = user_1.UserSchema.safeParse(req.body);
     if (!data.success) {
         return res.status(400).json({ error: data.error });
@@ -57,10 +56,10 @@ app.post("/signUp", (req, res) => __awaiter(void 0, void 0, void 0, function* ()
     }
 }));
 // SignIn
-app.post("/signIn", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+app.post("/backend/signIn", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const data = signInType.safeParse(req.body);
     if (!data.success) {
-        return res.status(400).json({ error: data.error });
+        return res.status(400).json({ status: false, error: data.error });
     }
     try {
         const user = yield prisma.user.findFirst({
@@ -70,37 +69,46 @@ app.post("/signIn", (req, res) => __awaiter(void 0, void 0, void 0, function* ()
             }
         });
         if (user === null) {
-            return res.status(400).json({ error: "Invalid Username or Password" });
+            return res.status(400).json({ status: false, error: "Invalid Username or Password" });
         }
         const token = jsonwebtoken_1.default.sign({ id: user.id }, "secret");
-        return res.status(200).json({ token });
+        return res.status(200).json({ status: true, token });
     }
     catch (e) {
         console.log("Internal Server Error : ", e);
-        return res.status(500).json({ error: "Internal Server Error" });
+        return res.status(500).json({ status: false, error: "Internal Server Error" });
     }
 }));
+const createName = () => {
+    return Math.random().toString(36).substring(7);
+};
 // Create Room
-app.post('/createRoom', middleware_1.middleware, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const safeData = room_1.RoomSchema.safeParse(req.body);
-    if (!safeData.data) {
-        return res.status(400).json({ error: safeData.error });
-    }
+app.post('/backend/createRoom', middleware_1.middleware, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const RoomName = createName();
     try {
-        const room = yield prisma.room.create({
-            data: {
-                slug: safeData.data.name,
+        // Check if the Room with userId Already Exists
+        const Checkroom = yield prisma.room.findFirst({
+            where: {
                 adminId: req.body.userId
             }
         });
-        return res.status(200).json({ room: room });
+        if (Checkroom) {
+            return res.status(200).json({ status: true, message: "Room Found", room: Checkroom });
+        }
+        const room = yield prisma.room.create({
+            data: {
+                slug: RoomName,
+                adminId: req.body.userId
+            }
+        });
+        return res.status(200).json({ status: true, message: "Created New Room", room: room });
     }
     catch (e) {
         return res.status(500).json({ error: "Internal Server Error" });
     }
 }));
 // Get The Messages from a Room
-app.get("/getMessages/:roomId", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+app.get("/backend/getMessages/:roomId", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const roomId = req.params.roomId;
     try {
         const messages = yield prisma.chat.findMany({
@@ -119,7 +127,7 @@ app.get("/getMessages/:roomId", (req, res) => __awaiter(void 0, void 0, void 0, 
     }
 }));
 // Get The Room Details
-app.get("/getRoom/:slug", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+app.get("/backend/getRoom/:slug", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const slug = req.params.slug;
     try {
         const room = yield prisma.room.findFirst({
@@ -128,7 +136,7 @@ app.get("/getRoom/:slug", (req, res) => __awaiter(void 0, void 0, void 0, functi
             }
         });
         if (room === null) {
-            return res.status(404).json({ error: "Room Not Found" });
+            return res.status(200).json({ error: "Room Not Found" });
         }
         return res.status(200).json({ room });
     }
@@ -136,7 +144,7 @@ app.get("/getRoom/:slug", (req, res) => __awaiter(void 0, void 0, void 0, functi
         return res.status(500).json({ error: "Internal Server Error" });
     }
 }));
-app.get("/", (req, res) => {
+app.get("/backend", (req, res) => {
     return res.send("Hello World");
 });
 app.listen(5000, () => {

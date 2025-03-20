@@ -4,7 +4,20 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e111901c-88b2-4201-afa9-c5cd60f320ee" name="Changes" comment="" />
+    <list default="true" id="e111901c-88b2-4201-afa9-c5cd60f320ee" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Frontend/Components/Navbar.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/Components/Navbar.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Frontend/Components/Whiteboard.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/Components/Whiteboard.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Frontend/app/Signin/layout.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Frontend/app/Signin/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/app/Signin/page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Frontend/app/Whiteboard/[roomId]/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/app/Whiteboard/[roomId]/page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Frontend/app/api/config/route.ts" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/app/api/config/route.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Frontend/utils/getShapes.ts" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/utils/getShapes.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/dist/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/backend/dist/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/dist/types/room.js" beforeDir="false" afterPath="$PROJECT_DIR$/backend/dist/types/room.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/index.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/types/room.ts" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/types/room.ts" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -126,7 +139,10 @@
       <workItem from="1741278789243" duration="2282000" />
       <workItem from="1742211274663" duration="10609000" />
       <workItem from="1742268769081" duration="4920000" />
-      <workItem from="1742309809468" duration="360000" />
+      <workItem from="1742309809468" duration="2753000" />
+      <workItem from="1742376683573" duration="6231000" />
+      <workItem from="1742398432372" duration="2707000" />
+      <workItem from="1742466946538" duration="613000" />
     </task>
     <servers />
   </component>

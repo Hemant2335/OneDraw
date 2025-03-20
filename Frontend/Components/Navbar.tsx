@@ -2,37 +2,24 @@
 
 import React, {useState} from "react";
 import Link from "next/link";
+import {usePathname} from "next/navigation";
 
 const Navbar = () => {
 
     const [isLoading, setIsLoading] = useState(false);
     const [adminRoom , setAdminRoom] = useState<string | null>('');
+    const pathname = usePathname();
 
     const createRoom = async () => {
         try {
-            const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/createRoom` ,{
+            const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/backend/createRoom` ,{
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
+                    "authorization" : localStorage.getItem('token')  || ""
                 },
                 credentials: "include",
-            });
-            const data = await res.json();
-            return data;
-        } catch (error) {
-            console.log(error);
-            setIsLoading(false);
-        }
-    }
 
-    const fetchRoom = async () => {
-        try {
-            const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/getRoom/${localStorage.getItem('token')}` ,{
-                method: "GET",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                credentials: "include",
             });
             const data = await res.json();
             return data;
@@ -48,23 +35,20 @@ const Navbar = () => {
             window.location.href = `/Whiteboard/${adminRoom}`;
             return;
         }
-        const data = await fetchRoom();
-        if(data.error){
+        try{
             const newRoom = await createRoom();
-            if(newRoom){
-                setAdminRoom(newRoom.Id);
-                window.location.href = `/Whiteboard/${data.Id}`;
-            }
-        }else{
-            setAdminRoom(data.Id);
-            window.location.href = `/Whiteboard/${data.Id}`;
+            setAdminRoom(newRoom.room.id);
+            window.location.href = `/Whiteboard/${newRoom.room.id}`;
+        }catch (error) {
+            console.log(error);
+            setIsLoading(false);
         }
 
     }
 
 
   return (
-    <div className="w-full mt-[4vh] h-[5vh] flex items-center justify-center ">
+    <div className={`w-full mt-[4vh] h-[5vh]  items-center justify-center ${pathname !== "/" ? "hidden" : "flex"} `}>
       <div className="bg-[#121212] w-fit h-fit  p-3 title rounded-md fixed z-10">
         <nav className={`flex  justify-between w-[90vw] h-[5vh]`}>
           <div className={`flex gap-[3vw]`}>
