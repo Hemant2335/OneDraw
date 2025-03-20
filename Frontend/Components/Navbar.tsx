@@ -12,7 +12,7 @@ const Navbar = () => {
 
     const createRoom = async () => {
         try {
-            const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/backend/createRoom` ,{
+            const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/createRoom` ,{
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",

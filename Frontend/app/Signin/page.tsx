@@ -19,7 +19,7 @@ const SignIn = () => {
         try {
             const env = await fetch("/api/config");
             const configenv = await env.json();
-            const res = await fetch(`${configenv.backendUrl}/backend/signIn`, {
+            const res = await fetch(`${configenv.backendUrl}/signIn`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
