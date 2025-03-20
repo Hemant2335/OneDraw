@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: backend
-          image: 717279689524.dkr.ecr.ap-south-1.amazonaws.com/backend:067f095
+          image: 717279689524.dkr.ecr.ap-south-1.amazonaws.com/backend:f6a5add
           ports:
             - containerPort: 5000
           volumeMounts:
@@ -42,7 +42,7 @@ spec:
     spec:
       containers:
         - name: frontend
-          image: 717279689524.dkr.ecr.ap-south-1.amazonaws.com/frontend:067f095
+          image: 717279689524.dkr.ecr.ap-south-1.amazonaws.com/frontend:8836339
           ports:
             - containerPort: 3000
           volumeMounts:
@@ -70,7 +70,7 @@ spec:
     spec:
       containers:
         - name: websocket
-          image: 717279689524.dkr.ecr.ap-south-1.amazonaws.com/websocket:067f095
+          image: 717279689524.dkr.ecr.ap-south-1.amazonaws.com/websocket:f6a5add
           ports:
             - containerPort: 8080
 
