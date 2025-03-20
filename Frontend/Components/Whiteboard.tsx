@@ -19,12 +19,12 @@ const Whiteboard : React.FC<{roomId : string}> = ({roomId}) =>{
         return () => {
             signalingManager.closeConnection();
         }
-    }, [roomId]);
+    }, []);
     
     useEffect(() => {
         console.log("Selected Tool" , roomId);
         drawHandler?.selectTool(tool);
-    }, [drawHandler, roomId, tool]);
+    }, [drawHandler, tool]);
 
     useEffect(() => {
         if(!canvasRef.current){
@@ -38,7 +38,7 @@ const Whiteboard : React.FC<{roomId : string}> = ({roomId}) =>{
         return () => {
             drawHandler?.clearCanvas();
         }
-    }, [drawHandler , canvasRef , roomId , Instance]);
+    }, [ canvasRef , Instance]);
     
 
     return (

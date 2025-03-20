@@ -5,7 +5,6 @@ import {UserSchema} from "./types/user";
 import jsonwebtoken from "jsonwebtoken";
 import {PrismaClient} from "@prisma/client";
 import {middleware} from "./Middleware/middleware";
-import {RoomSchema} from "./types/room";
 
 require('dotenv').config()
 
@@ -52,7 +51,7 @@ app.post("/backend/signUp" , async(req , res) : Promise<any> =>{
 app.post("/backend/signIn" , async(req  , res) : Promise<any> =>{
     const data = signInType.safeParse(req.body)
     if(!data.success){
-        return res.status(400).json({error: data.error})
+        return res.status(400).json({status : false , error: data.error})
     }
     try {
         const user = await prisma.user.findFirst({
@@ -62,31 +61,42 @@ app.post("/backend/signIn" , async(req  , res) : Promise<any> =>{
             }
         })
         if(user === null){
-            return res.status(400).json({error: "Invalid Username or Password"})
+            return res.status(400).json({status : false , error: "Invalid Username or Password"})
         }
         const token = jsonwebtoken.sign({id: user.id} , "secret")
-        return res.status(200).json({token})
+        return res.status(200).json({status : true , token})
     }catch (e) {
         console.log("Internal Server Error : " , e);
-        return res.status(500).json({error: "Internal Server Error"})
+        return res.status(500).json({status : false , error: "Internal Server Error"})
     }
 })
+
+const createName = () => {
+    return Math.random().toString(36).substring(7);
+}
 
 
 // Create Room
 app.post('/backend/createRoom' , middleware , async (req , res) : Promise<any> => {
-    const safeData = RoomSchema.safeParse(req.body);
-    if(!safeData.data){
-        return res.status(400).json({error: safeData.error})
-    }
+
+    const RoomName = createName();
     try{
-        const room = await prisma.room.create({
-            data: {
-                slug: safeData.data.name,
+        // Check if the Room with userId Already Exists
+        const Checkroom = await prisma.room.findFirst({
+            where: {
                 adminId: req.body.userId
             }
         })
-        return res.status(200).json({room : room})
+        if(Checkroom){
+            return res.status(200).json({status : true , message : "Room Found" , room : Checkroom})
+        }
+        const room = await prisma.room.create({
+            data: {
+                slug: RoomName,
+                adminId: req.body.userId
+            }
+        })
+        return res.status(200).json({status : true , message : "Created New Room" , room : room})
     }catch (e) {
         return res.status(500).json({error: "Internal Server Error"})
     }
@@ -122,7 +132,7 @@ app.get("/backend/getRoom/:slug" , async (req , res) : Promise<any> =>{
             }
         })
         if(room === null){
-            return res.status(404).json({error: "Room Not Found"})
+            return res.status(200).json({error: "Room Not Found"})
         }
         return res.status(200).json({room})
     }catch (e) {

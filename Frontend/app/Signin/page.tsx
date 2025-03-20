@@ -19,7 +19,7 @@ const SignIn = () => {
         try {
             const env = await fetch("/api/config");
             const configenv = await env.json();
-            const res = await fetch(`${configenv.backendUrl}/signIn`, {
+            const res = await fetch(`${configenv.backendUrl}/backend/signIn`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -32,22 +32,15 @@ const SignIn = () => {
             });
 
             const data = await res.json();
-            console.log(data);
-            if (!data) {
+            if (!data.status) {
                 return setWarning("Something Went Wrong");
-            }
-            if (data.Status === false) {
-                setWarning(data.error);
-                return;
             }
             setUser(data.user);
             console.log(data);
             if(typeof window !== "undefined"){
                 localStorage.setItem("token", data.token);
             }
-
             return navigate.push("/");
-
         } catch (error) {
             console.log(error);
             return setWarning("Internal Server Error");
