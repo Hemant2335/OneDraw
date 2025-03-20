@@ -1,7 +1,7 @@
 import axios from "axios"
 
 const getShapes = async (RoomId : string) => {
-    const response = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_URL}/backend/getMessages/${RoomId}` , {
+    const response = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_URL}/getMessages/${RoomId}` , {
         headers: {
             "Content-Type": "application/json",
             "authorization": window.localStorage.getItem("token")
