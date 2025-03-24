@@ -7,7 +7,7 @@ export class signalingManager {
 
     constructor(roomId : string) {
         this.roomId = roomId;
-        this.ws = new WebSocket(`${process.env.NEXT_PUBLIC_WEBSOCKET_SERVER_URL}?token=${window.localStorage.getItem("token")}`);
+        this.ws = new WebSocket(`ws://af2c804dfa62c414d8993b893aa3369a-1544082881.ap-south-1.elb.amazonaws.com/websocket?token=${window.localStorage.getItem("token")}`);
         this.ws.onopen = () => {
             const data = JSON.stringify({
                 type: "joinRoom",
