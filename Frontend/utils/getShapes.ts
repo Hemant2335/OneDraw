@@ -1,9 +1,7 @@
 import axios from "axios"
 
 const getShapes = async (RoomId : string) => {
-    const env = await fetch("/api/config");
-    const configenv = await env.json();
-    const response = await axios.get(`${configenv.backendUrl}/getMessages/${RoomId}` , {
+    const response = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_URL}/getMessages/${RoomId}` , {
         headers: {
             "Content-Type": "application/json",
             "authorization": window.localStorage.getItem("token")

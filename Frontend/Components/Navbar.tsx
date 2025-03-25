@@ -12,9 +12,7 @@ const Navbar = () => {
 
     const createRoom = async () => {
         try {
-            const env = await fetch("/api/config");
-            const configenv = await env.json();
-            const res = await fetch(`${configenv.backendUrl}/createRoom` ,{
+            const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/createRoom` ,{
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
