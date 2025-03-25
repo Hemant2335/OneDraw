@@ -13,7 +13,6 @@ const Signup = () => {
     const router = useRouter();
 
     async function createuser(Props:{Name:string,Username:string,Password:string}) {
-        console.log("Running");
         try {
             const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/signUp` ,{
                 method: "POST",

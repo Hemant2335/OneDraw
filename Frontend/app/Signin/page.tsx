@@ -17,9 +17,7 @@ const SignIn = () => {
 
     const handlelogin = async () => {
         try {
-            const env = await fetch("/api/config");
-            const configenv = await env.json();
-            const res = await fetch(`${configenv.backendUrl}/signIn`, {
+            const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/signIn`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
