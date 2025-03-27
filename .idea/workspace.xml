@@ -5,8 +5,20 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="e111901c-88b2-4201-afa9-c5cd60f320ee" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/Frontend/Classes/OfflineDrawHandler.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mainfest.yml" beforeDir="false" afterPath="$PROJECT_DIR$/mainfest.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Frontend/Classes/signalingManager.ts" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/Classes/signalingManager.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Frontend/Components/ToolBar.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/Components/ToolBar.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Frontend/Components/Whiteboard.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/Components/Whiteboard.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/WsServer/dist/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/WsServer/dist/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/WsServer/prisma/schema.prisma" beforeDir="false" afterPath="$PROJECT_DIR$/WsServer/prisma/schema.prisma" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/WsServer/src/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/WsServer/src/index.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/dist/Middleware/middleware.js" beforeDir="false" afterPath="$PROJECT_DIR$/backend/dist/Middleware/middleware.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/dist/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/backend/dist/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/dist/types/room.js" beforeDir="false" afterPath="$PROJECT_DIR$/backend/dist/types/room.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/dist/types/user.js" beforeDir="false" afterPath="$PROJECT_DIR$/backend/dist/types/user.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/prisma/schema.prisma" beforeDir="false" afterPath="$PROJECT_DIR$/backend/prisma/schema.prisma" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/index.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -23,6 +35,7 @@
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+    <option name="RESET_MODE" value="HARD" />
   </component>
   <component name="GitHubPullRequestSearchHistory">{
   &quot;lastFilter&quot;: {
@@ -137,6 +150,9 @@
       <workItem from="1742834602249" duration="4550000" />
       <workItem from="1742885173708" duration="3065000" />
       <workItem from="1742919845792" duration="5034000" />
+      <workItem from="1742965865153" duration="10319000" />
+      <workItem from="1743010124927" duration="5842000" />
+      <workItem from="1743063213840" duration="3759000" />
     </task>
     <servers />
   </component>

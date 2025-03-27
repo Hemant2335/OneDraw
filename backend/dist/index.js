@@ -113,7 +113,7 @@ app.get("/backend/getMessages/:roomId", (req, res) => __awaiter(void 0, void 0, 
     try {
         const messages = yield prisma.chat.findMany({
             where: {
-                roomId: parseInt(roomId)
+                roomId: roomId
             },
             orderBy: {
                 id: 'desc'

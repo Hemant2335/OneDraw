@@ -83,29 +83,43 @@ wss.on("connection", (ws, request) => {
             user.rooms = user === null || user === void 0 ? void 0 : user.rooms.filter((el => el !== data.roomId));
         }
         if (data.type === "msg") {
-            const roomId = parseInt(data.roomID);
+            const roomId = data.roomID;
+            console.log(roomId, typeof roomId);
             const userId = (_a = users.find((el => el.ws === ws))) === null || _a === void 0 ? void 0 : _a.userId;
             const message = JSON.stringify(data.shape);
             if (!userId) {
                 return;
             }
-            const chat = yield prisma.chat.create({
-                data: {
-                    roomId: roomId,
-                    userId: userId,
-                    message: message
+            try {
+                // Check if the Room Exists
+                const room = yield prisma.room.findUnique({
+                    where: { id: roomId.toString() },
+                });
+                if (!room) {
+                    console.log("Room not found:", roomId);
+                    return;
                 }
-            });
-            console.log(users, "RoomID", data.roomID);
-            users.forEach((el) => {
-                if (el.rooms.includes(data.roomID)) {
-                    el.ws.send(JSON.stringify({
-                        type: "msg",
-                        message: message,
-                        userId: userId
-                    }));
-                }
-            });
+                const chat = yield prisma.chat.create({
+                    data: {
+                        roomId: roomId.toString(),
+                        userId: userId,
+                        message: message
+                    }
+                });
+                console.log(users, "RoomID", data.roomID);
+                users.forEach((el) => {
+                    if (el.rooms.includes(data.roomID)) {
+                        el.ws.send(JSON.stringify({
+                            type: "msg",
+                            message: message,
+                            userId: userId
+                        }));
+                    }
+                });
+            }
+            catch (e) {
+                console.log(e);
+            }
         }
     }));
 });

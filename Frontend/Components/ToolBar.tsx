@@ -1,10 +1,11 @@
 import {Circle, LineChart, Pencil, Square, Trash, Triangle} from "lucide-react"
 import React from "react";
 import {DrawHandler} from "@/Classes/DrawHandler";
+import {OfflineDrawHandler} from "@/Classes/OfflineDrawHandler";
 
 export type Tooltype ="pen" | "circle" | "rect" | "line" | "triangle" | "eraser";
 
-export const ToolBar: React.FC<{drawHandler: DrawHandler | null, setTool: React.Dispatch<React.SetStateAction<Tooltype>> , tool:Tooltype}> = ({drawHandler , setTool , tool}) => {
+export const ToolBar: React.FC<{drawHandler: DrawHandler | OfflineDrawHandler | null, setTool: React.Dispatch<React.SetStateAction<Tooltype>> , tool:Tooltype}> = ({drawHandler , setTool , tool}) => {
 
     const handleSelectTool = (tool : Tooltype) =>{
         if(!drawHandler) return ;
