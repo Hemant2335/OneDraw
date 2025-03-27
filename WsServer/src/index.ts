@@ -1,5 +1,4 @@
-
-import {WebSocketServer , WebSocket} from "ws"
+import {WebSocket, WebSocketServer} from "ws"
 import jwt from "jsonwebtoken";
 import {PrismaClient} from "@prisma/client";
 
@@ -84,29 +83,45 @@ wss.on("connection" , (ws , request)=>{
 
 
         if(data.type === "msg"){
-            const  roomId = parseInt(data.roomID);
+            const  roomId = data.roomID;
+            console.log(roomId , typeof roomId);
             const userId = users.find((el => el.ws === ws))?.userId;
             const message = JSON.stringify(data.shape);
             if(!userId){
                 return ;
             }
-            const chat =  await prisma.chat.create({
-                data : {
-                    roomId: roomId,
-                    userId: userId,
-                    message: message
+            try{
+                // Check if the Room Exists
+                const room = await prisma.room.findUnique({
+                    where: { id: roomId.toString() },
+                });
+                if (!room) {
+                    console.log("Room not found:", roomId);
+                    return;
                 }
-            })
-            console.log(users , "RoomID" , data.roomID);
-            users.forEach((el)=>{
-                if(el.rooms.includes(data.roomID)){
-                    el.ws.send(JSON.stringify({
-                        type: "msg",
-                        message: message,
-                        userId: userId
-                    }))
-                }
-            })
+
+
+                const chat =  await prisma.chat.create({
+                    data : {
+                        roomId: roomId.toString(),
+                        userId: userId,
+                        message: message
+                    }
+                })
+                console.log(users , "RoomID" , data.roomID);
+                users.forEach((el)=>{
+                    if(el.rooms.includes(data.roomID)){
+                        el.ws.send(JSON.stringify({
+                            type: "msg",
+                            message: message,
+                            userId: userId
+                        }))
+                    }
+                })
+            }catch (e) {
+                console.log(e);
+            }
+
         }
     })
 
