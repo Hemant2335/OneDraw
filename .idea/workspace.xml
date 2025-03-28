@@ -7,7 +7,6 @@
     <list default="true" id="e111901c-88b2-4201-afa9-c5cd60f320ee" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Frontend/Classes/OfflineDrawHandler.ts" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/Classes/OfflineDrawHandler.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Frontend/Components/ToolBar.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/Components/ToolBar.tsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -142,7 +141,7 @@
       <workItem from="1742965865153" duration="10319000" />
       <workItem from="1743010124927" duration="5842000" />
       <workItem from="1743063213840" duration="6946000" />
-      <workItem from="1743142599933" duration="658000" />
+      <workItem from="1743142599933" duration="2897000" />
     </task>
     <servers />
   </component>
