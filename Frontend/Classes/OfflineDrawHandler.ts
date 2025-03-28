@@ -60,7 +60,7 @@ export class OfflineDrawHandler {
   private shapes: Shape[] = [];
   private isDragging: boolean;
   private dragStart: { x: number; y: number } | null = null;
-  private dragEnd: { x: number; y: number } | null = null;
+  private currentResizeHandle: { x: number; y: number; type:string } | null = null;
   private SelectedShape: Shape | undefined = undefined;
 
   constructor(canvas: HTMLCanvasElement) {
@@ -111,12 +111,48 @@ export class OfflineDrawHandler {
     this.shapes = [];
   }
 
-    drawSelectionBox() {
+    getHandleAtPosition(x : number, y : number) {
+        if (!this.SelectedShape) return null;
+
+        const padding = 10;
+        const handleSize = 16;
+
+        if (this.SelectedShape.name === "rect") {
+            // Check all rectangle handles
+            const handles = [
+                // Corners
+                { x: this.SelectedShape.x - padding/2, y: this.SelectedShape.y - padding/2, type: 'nw' },
+                { x: this.SelectedShape.x + this.SelectedShape.Width + padding/2, y: this.SelectedShape.y - padding/2, type: 'ne' },
+                { x: this.SelectedShape.x - padding/2, y: this.SelectedShape.y + this.SelectedShape.Height + padding/2, type: 'sw' },
+                { x: this.SelectedShape.x + this.SelectedShape.Width + padding/2, y: this.SelectedShape.y + this.SelectedShape.Height + padding/2, type: 'se' },
+                // Midpoints
+                { x: this.SelectedShape.x + this.SelectedShape.Width/2, y: this.SelectedShape.y - padding/2, type: 'n' },
+                { x: this.SelectedShape.x + this.SelectedShape.Width + padding/2, y: this.SelectedShape.y + this.SelectedShape.Height/2, type: 'e' },
+                { x: this.SelectedShape.x + this.SelectedShape.Width/2, y: this.SelectedShape.y + this.SelectedShape.Height + padding/2, type: 's' },
+                { x: this.SelectedShape.x - padding/2, y: this.SelectedShape.y + this.SelectedShape.Height/2, type: 'w' }
+            ];
+
+            for (const handle of handles) {
+                console.log(x , handle.x , (handle.x - handleSize/2 ) , (handle.x + handleSize/2) , y , handle.y, (handle.y - handleSize/2), (handle.y + handleSize/2));
+                if (x >= (handle.x - handleSize/2 )&& x <= (handle.x + handleSize/2) &&
+                    y >= (handle.y - handleSize/2) && y <= (handle.y + handleSize/2)) {
+                    return handle;
+                }
+            }
+        }
+        // Similar checks for circle and triangle...
+
+        return null;
+    }
+
+  drawSelectionBox() {
         if (!this.SelectedShape) {
             return;
         }
 
         const ctx = this.ctx;
+        const handleSize = 8; // Size of resize handles
+        const handleColor = "blue";
         ctx.strokeStyle = "blue"; // Change color for better visibility
         ctx.lineWidth = 2;
         ctx.setLineDash([5, 5]); // Dashed selection box
@@ -156,6 +192,45 @@ export class OfflineDrawHandler {
                 maxY - minY + padding
             );
         }
+
+        // Add the Logic to Resize the shapes
+
+        // 1) Add a resize handle to the bottom right corner of the selection box
+        ctx.fillStyle = "blue";
+        if (this.SelectedShape.name === "rect") {
+            // Draw selection rectangle
+            ctx.strokeRect(
+                this.SelectedShape.x - padding / 2,
+                this.SelectedShape.y - padding / 2,
+                this.SelectedShape.Width + padding,
+                this.SelectedShape.Height + padding
+            );
+
+            // Draw resize handles
+            ctx.fillStyle = handleColor;
+            ctx.setLineDash([]);
+
+            // Calculate handle positions (8 handles - corners and midpoints)
+            const handles = [
+                // Corners
+                { x: this.SelectedShape.x - padding/2, y: this.SelectedShape.y - padding/2, type: 'nw' },
+                { x: this.SelectedShape.x + this.SelectedShape.Width + padding/2, y: this.SelectedShape.y - padding/2, type: 'ne' },
+                { x: this.SelectedShape.x - padding/2, y: this.SelectedShape.y + this.SelectedShape.Height + padding/2, type: 'sw' },
+                { x: this.SelectedShape.x + this.SelectedShape.Width + padding/2, y: this.SelectedShape.y + this.SelectedShape.Height + padding/2, type: 'se' },
+                // Midpoints
+                { x: this.SelectedShape.x + this.SelectedShape.Width/2, y: this.SelectedShape.y - padding/2, type: 'n' },
+                { x: this.SelectedShape.x + this.SelectedShape.Width + padding/2, y: this.SelectedShape.y + this.SelectedShape.Height/2, type: 'e' },
+                { x: this.SelectedShape.x + this.SelectedShape.Width/2, y: this.SelectedShape.y + this.SelectedShape.Height + padding/2, type: 's' },
+                { x: this.SelectedShape.x - padding/2, y: this.SelectedShape.y + this.SelectedShape.Height/2, type: 'w' }
+            ];
+
+            handles.forEach(handle => {
+                ctx.fillRect(handle.x - handleSize/2, handle.y - handleSize/2, handleSize, handleSize);
+            });
+
+        }
+
+
 
         ctx.setLineDash([]); // Reset to solid lines
     }
@@ -266,6 +341,33 @@ export class OfflineDrawHandler {
       }
   }
 
+    resizeShape(mouseX : number, mouseY : number) {
+        if(!this.SelectedShape || !this.currentResizeHandle) return;
+        const shape = this.SelectedShape;
+        const handle = this.currentResizeHandle;
+
+        if (shape.name === "rect") {
+            switch (handle.type) {
+                case 'nw':
+                    shape.Width += shape.x - mouseX;
+                    shape.Height += shape.y - mouseY;
+                    shape.x = mouseX;
+                    shape.y = mouseY;
+                    break;
+                case 'ne':
+                    shape.Width = mouseX - shape.x;
+                    shape.Height += shape.y - mouseY;
+                    shape.y = mouseY;
+                    break;
+                // Implement other handle types...
+            }
+        }
+        this.clearCanvas();
+        this.shapes.forEach((shape) => {
+            this.draw(shape);
+        });
+    }
+
   initMouseEvents() {
     this.canvas.addEventListener("click", (e) => {
       this.lastX = e.offsetX;
@@ -281,6 +383,17 @@ export class OfflineDrawHandler {
       this.lastX = e.offsetX;
       this.lastY = e.offsetY;
       if(this.SelectedTool == "cursor" && this.SelectedShape){
+          // First check if the user is trying to resize the shape
+          const mouseX = e.clientX - this.canvas.offsetLeft;
+          const mouseY = e.clientY - this.canvas.offsetTop;
+          console.log(mouseX , mouseY);
+          const handle = this.getHandleAtPosition(mouseX, mouseY);
+          console.log("Handle" , handle);
+          if (handle) {
+              this.currentResizeHandle = handle;
+              return;
+          }
+
             this.SelectShape();
             this.dragStart = { x: this.lastX, y: this.lastY };
             this.isDragging = true;
@@ -365,6 +478,12 @@ export class OfflineDrawHandler {
     this.canvas.addEventListener("mousemove", (e) => {
       if (!this.isDrawing) {
         return;
+      }
+      if(this.SelectedTool == "cursor" && this.SelectedShape && this.currentResizeHandle){
+          const mouseX = e.clientX - this.canvas.offsetLeft;
+          const mouseY = e.clientY - this.canvas.offsetTop;
+          console.log("resizing shape");
+          this.resizeShape(mouseX, mouseY);
       }
       if (this.isDragging) {
         if (!this.dragStart) {
