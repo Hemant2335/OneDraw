@@ -60,6 +60,10 @@ export class OfflineDrawHandler {
     private SelectedColor: string;
     private SelectedTool: Tooltype;
     private shapes: Shape[] = [];
+    private isDragging: boolean;
+    private dragStart: {x: number, y: number} | null = null;
+    private dragEnd: {x: number, y: number} | null = null
+    private SelectedShape: Shape | undefined = undefined;
 
     constructor(canvas: HTMLCanvasElement) {
         this.canvas = canvas;
@@ -67,6 +71,7 @@ export class OfflineDrawHandler {
         this.isDrawing = false;
         this.lastX = 0;
         this.lastY = 0;
+        this.isDragging = false;
         this.SelectedColor = "black";
         this.SelectedTool = "rect";
         this.shapes = [];
@@ -150,6 +155,36 @@ export class OfflineDrawHandler {
             this.isDrawing = true;
             this.lastX = e.offsetX;
             this.lastY = e.offsetY;
+            if(this.SelectedTool == "cursor"){
+
+                // Finding the shape to drag
+                const Shape = this.shapes.find((shape)=>{
+                    if(shape.name == "rect"){
+                        if(this.lastX > shape.x && this.lastX < shape.x + shape.Width && this.lastY > shape.y && this.lastY < shape.y + shape.Height){
+                            return true;
+                        }
+                    }else if(shape.name == "circle"){
+                        if(Math.sqrt(Math.pow(this.lastX - shape.x,2) + Math.pow(this.lastY - shape.y,2)) < shape.radius){
+                            return true;
+                        }
+                    }else if(shape.name == "triangle"){
+                        const area = Math.abs((shape.x2 - shape.x1)*(shape.y3 - shape.y1) - (shape.x3 - shape.x1)*(shape.y2 - shape.y1));
+                        const area1 = Math.abs((shape.x1 - this.lastX)*(shape.y2 - this.lastY) - (shape.x2 - this.lastX)*(shape.y1 - this.lastY));
+                        const area2 = Math.abs((shape.x2 - this.lastX)*(shape.y3 - this.lastY) - (shape.x3 - this.lastX)*(shape.y2 - this.lastY));
+                        const area3 = Math.abs((shape.x3 - this.lastX)*(shape.y1 - this.lastY) - (shape.x1 - this.lastX)*(shape.y3 - this.lastY));
+                        if(area == area1 + area2 + area3){
+                            return true;
+                        }
+                    }
+                    return false;
+                });
+                if(Shape) {
+                    this.dragStart = {x: this.lastX, y: this.lastY};
+                    this.isDragging = true;
+                    this.SelectedShape = Shape;
+                }
+
+            }
         });
 
         this.canvas.addEventListener("mouseup", (e) => {
@@ -157,7 +192,13 @@ export class OfflineDrawHandler {
             const width = e.offsetX - this.lastX;
             const height = e.offsetY - this.lastY;
             let shape: Shape;
+            if(this.isDragging){
 
+                this.isDragging = false;
+                this.dragStart = null;
+                this.SelectedShape = undefined;
+                return ;
+            }
             if (this.SelectedTool == "rect") {
                 shape = {
                     name: "rect",
@@ -225,6 +266,36 @@ export class OfflineDrawHandler {
         this.canvas.addEventListener("mousemove", (e) => {
             if (!this.isDrawing) {
                 return;
+            }
+            if(this.isDragging){
+                if(!this.dragStart){
+                    return ;
+                }
+                const dx = e.offsetX - this.dragStart.x;
+                const dy = e.offsetY - this.dragStart.y;
+                if(this.SelectedShape){
+                    if(this.SelectedShape.name == "rect"){
+                        this.SelectedShape.x += dx;
+                        this.SelectedShape.y += dy;
+                    }else if(this.SelectedShape.name == "circle"){
+                        this.SelectedShape.x += dx;
+                        this.SelectedShape.y += dy;
+                    }else if(this.SelectedShape.name == "triangle"){
+                        this.SelectedShape.x1 += dx;
+                        this.SelectedShape.x2 += dx;
+                        this.SelectedShape.x3 += dx;
+                        this.SelectedShape.y1 += dy;
+                        this.SelectedShape.y2 += dy;
+                        this.SelectedShape.y3 += dy;
+                    }
+                }
+                this.clearCanvas();
+                this.shapes.forEach((shape)=>{
+                    this.draw(shape);
+                })
+                localStorage.setItem("shapes", JSON.stringify(this.shapes));
+                this.dragStart = {x: e.offsetX, y: e.offsetY};
+                return ;
             }
 
             const width = e.offsetX - this.lastX;
