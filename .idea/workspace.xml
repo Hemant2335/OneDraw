@@ -141,7 +141,8 @@
       <workItem from="1742965865153" duration="10319000" />
       <workItem from="1743010124927" duration="5842000" />
       <workItem from="1743063213840" duration="6946000" />
-      <workItem from="1743142599933" duration="2897000" />
+      <workItem from="1743142599933" duration="9388000" />
+      <workItem from="1743226346727" duration="293000" />
     </task>
     <servers />
   </component>
@@ -156,6 +157,11 @@
     </option>
   </component>
   <component name="Vcs.Log.Tabs.Properties">
+    <option name="OPEN_GENERIC_TABS">
+      <map>
+        <entry key="c0c3a494-0ee1-4d72-8bf8-fc09b747a27d" value="TOOL_WINDOW" />
+      </map>
+    </option>
     <option name="RECENT_FILTERS">
       <map>
         <entry key="Branch">
@@ -181,6 +187,28 @@
         <entry key="MAIN">
           <value>
             <State>
+              <option name="FILTERS">
+                <map>
+                  <entry key="branch">
+                    <value>
+                      <list>
+                        <option value="HEAD" />
+                      </list>
+                    </value>
+                  </entry>
+                </map>
+              </option>
+            </State>
+          </value>
+        </entry>
+        <entry key="c0c3a494-0ee1-4d72-8bf8-fc09b747a27d">
+          <value>
+            <State>
+              <option name="CUSTOM_BOOLEAN_PROPERTIES">
+                <map>
+                  <entry key="Show.Git.Branches" value="true" />
+                </map>
+              </option>
               <option name="FILTERS">
                 <map>
                   <entry key="branch">

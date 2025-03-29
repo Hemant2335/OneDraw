@@ -157,7 +157,7 @@ export class OfflineDrawHandler {
         ctx.lineWidth = 2;
         ctx.setLineDash([5, 5]); // Dashed selection box
 
-        const padding = 10; // Padding around selection box
+        const padding = 4; // Padding around selection box
 
         if (this.SelectedShape.name === "rect") {
             ctx.strokeRect(
@@ -359,7 +359,15 @@ export class OfflineDrawHandler {
                     shape.Height += shape.y - mouseY;
                     shape.y = mouseY;
                     break;
-                // Implement other handle types...
+                case 'sw':
+                    shape.Width += shape.x - mouseX;
+                    shape.Height = mouseY - shape.y;
+                    shape.x = mouseX;
+                    break;
+                case 'se':
+                    shape.Width = mouseX - shape.x;
+                    shape.Height = mouseY - shape.y;
+                    break;
             }
         }
         this.clearCanvas();
@@ -410,6 +418,10 @@ export class OfflineDrawHandler {
         this.dragStart = null;
         this.SelectedShape = undefined;
         return;
+      }
+      if(this.currentResizeHandle){
+            this.currentResizeHandle = null;
+            return;
       }
       if (this.SelectedTool == "rect") {
         shape = {
