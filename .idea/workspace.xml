@@ -4,10 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e111901c-88b2-4201-afa9-c5cd60f320ee" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Frontend/Classes/OfflineDrawHandler.ts" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/Classes/OfflineDrawHandler.ts" afterDir="false" />
-    </list>
+    <list default="true" id="e111901c-88b2-4201-afa9-c5cd60f320ee" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -142,7 +139,7 @@
       <workItem from="1743010124927" duration="5842000" />
       <workItem from="1743063213840" duration="6946000" />
       <workItem from="1743142599933" duration="9388000" />
-      <workItem from="1743226346727" duration="293000" />
+      <workItem from="1743226346727" duration="672000" />
     </task>
     <servers />
   </component>

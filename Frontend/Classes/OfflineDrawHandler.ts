@@ -140,7 +140,13 @@ export class OfflineDrawHandler {
                 }
             }
         }
-        // Similar checks for circle and triangle...
+        if(this.SelectedShape.name === "circle"){
+            const distance = Math.sqrt(Math.pow(x - this.SelectedShape.x, 2) + Math.pow(y - this.SelectedShape.y, 2));
+            if (Math.abs(distance - this.SelectedShape.radius) <= 10) {
+                return { x: this.SelectedShape.x + this.SelectedShape.radius, y: this.SelectedShape.y, type: 'se' };
+            }
+
+        }
 
         return null;
     }
@@ -229,9 +235,19 @@ export class OfflineDrawHandler {
             });
 
         }
-
-
-
+        if(this.SelectedShape.name === "circle"){
+            ctx.beginPath();
+            ctx.arc(
+                this.SelectedShape.x,
+                this.SelectedShape.y,
+                this.SelectedShape.radius + padding / 2, // Extra padding around the circle
+                0,
+                Math.PI * 2
+            );
+            ctx.stroke();
+            ctx.fillStyle = handleColor;
+            ctx.fillRect(this.SelectedShape.x + this.SelectedShape.radius - handleSize/2, this.SelectedShape.y - handleSize/2, handleSize, handleSize);
+        }
         ctx.setLineDash([]); // Reset to solid lines
     }
 
@@ -368,6 +384,12 @@ export class OfflineDrawHandler {
                     shape.Width = mouseX - shape.x;
                     shape.Height = mouseY - shape.y;
                     break;
+            }
+        }
+        if(shape.name === "circle"){
+            const distance = Math.sqrt(Math.pow(mouseX - shape.x, 2) + Math.pow(mouseY - shape.y, 2));
+            if (handle.type === 'se') {
+                shape.radius = distance;
             }
         }
         this.clearCanvas();
