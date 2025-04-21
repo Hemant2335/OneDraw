@@ -4,7 +4,20 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e111901c-88b2-4201-afa9-c5cd60f320ee" name="Changes" comment="" />
+    <list default="true" id="e111901c-88b2-4201-afa9-c5cd60f320ee" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Frontend/Classes/DrawHandler.ts" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/Classes/DrawHandler.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Frontend/Classes/OfflineDrawHandler.ts" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/Classes/OfflineDrawHandler.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Frontend/Classes/signalingManager.ts" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/Classes/signalingManager.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Frontend/Components/Whiteboard.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/Components/Whiteboard.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Frontend/app/Signin/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/app/Signin/page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Frontend/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Frontend/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/WsServer/dist/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/WsServer/dist/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/WsServer/prisma/schema.prisma" beforeDir="false" afterPath="$PROJECT_DIR$/WsServer/prisma/schema.prisma" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/WsServer/src/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/WsServer/src/index.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/prisma/schema.prisma" beforeDir="false" afterPath="$PROJECT_DIR$/backend/prisma/schema.prisma" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -13,8 +26,8 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="TypeScript File" />
         <option value="TypeScript JSX File" />
+        <option value="TypeScript File" />
       </list>
     </option>
   </component>
@@ -139,7 +152,13 @@
       <workItem from="1743010124927" duration="5842000" />
       <workItem from="1743063213840" duration="6946000" />
       <workItem from="1743142599933" duration="9388000" />
-      <workItem from="1743226346727" duration="672000" />
+      <workItem from="1743226346727" duration="1704000" />
+      <workItem from="1743868505788" duration="821000" />
+      <workItem from="1744363050737" duration="2840000" />
+      <workItem from="1744723867991" duration="1174000" />
+      <workItem from="1744785563940" duration="1798000" />
+      <workItem from="1744881701251" duration="9117000" />
+      <workItem from="1745246388889" duration="8875000" />
     </task>
     <servers />
   </component>

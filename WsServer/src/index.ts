@@ -81,16 +81,55 @@ wss.on("connection" , (ws , request)=>{
             user.rooms = user?.rooms.filter((el => el !== data.roomId));
         }
 
-
-        if(data.type === "msg"){
-            const  roomId = data.roomID;
-            console.log(roomId , typeof roomId);
+        if(data.type === "move"){
+            const  roomId = data.roomId;
             const userId = users.find((el => el.ws === ws))?.userId;
-            const message = JSON.stringify(data.shape);
             if(!userId){
                 return ;
             }
-            try{
+            // Update the Shape in the Database
+            const shape = await prisma.chat.update({
+                where: {
+                    id: data.shape.id
+                },
+                data:{
+                    message: JSON.stringify(data.shape)
+                }
+            })
+
+            const message = JSON.stringify(data.shape);
+
+            users.forEach((el) => {
+                if (el.rooms.includes(data.roomID)) {
+                    el.ws.send(
+                        JSON.stringify({
+                            type: "move",
+                            message: message,
+                            userId: userId,
+                        })
+                    );
+                }
+            });
+        }
+
+
+        if (data.type === "msg") {
+            const roomId = data.roomID;
+            console.log("Room ID:", roomId, typeof roomId);
+
+            if (!roomId) {
+                console.log("Error: roomID is missing or invalid.");
+                return;
+            }
+
+            const userId = users.find((el) => el.ws === ws)?.userId;
+            const message = JSON.stringify(data.shape);
+
+            if (!userId) {
+                return;
+            }
+
+            try {
                 // Check if the Room Exists
                 const room = await prisma.room.findUnique({
                     where: { id: roomId.toString() },
@@ -99,29 +138,29 @@ wss.on("connection" , (ws , request)=>{
                     console.log("Room not found:", roomId);
                     return;
                 }
-
-
-                const chat =  await prisma.chat.create({
-                    data : {
+                const chat = await prisma.chat.create({
+                    data: {
+                        id: data.shape.id,
                         roomId: roomId.toString(),
                         userId: userId,
-                        message: message
+                        message: message,
+                    },
+                });
+                console.log(users, "RoomID", data.roomID);
+                users.forEach((el) => {
+                    if (el.rooms.includes(data.roomID)) {
+                        el.ws.send(
+                            JSON.stringify({
+                                type: "msg",
+                                message: message,
+                                userId: userId,
+                            })
+                        );
                     }
-                })
-                console.log(users , "RoomID" , data.roomID);
-                users.forEach((el)=>{
-                    if(el.rooms.includes(data.roomID)){
-                        el.ws.send(JSON.stringify({
-                            type: "msg",
-                            message: message,
-                            userId: userId
-                        }))
-                    }
-                })
-            }catch (e) {
+                });
+            } catch (e) {
                 console.log(e);
             }
-
         }
     })
 

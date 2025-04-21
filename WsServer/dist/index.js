@@ -62,7 +62,7 @@ wss.on("connection", (ws, request) => {
         return ws.close();
     }
     ws.on("message", (message) => __awaiter(void 0, void 0, void 0, function* () {
-        var _a;
+        var _a, _b;
         let data;
         if (typeof message != "string") {
             data = JSON.parse(message.toString());
@@ -82,10 +82,40 @@ wss.on("connection", (ws, request) => {
             }
             user.rooms = user === null || user === void 0 ? void 0 : user.rooms.filter((el => el !== data.roomId));
         }
+        if (data.type === "move") {
+            const roomId = data.roomId;
+            const userId = (_a = users.find((el => el.ws === ws))) === null || _a === void 0 ? void 0 : _a.userId;
+            if (!userId) {
+                return;
+            }
+            // Update the Shape in the Database
+            const shape = yield prisma.chat.update({
+                where: {
+                    id: data.shape.id
+                },
+                data: {
+                    message: JSON.stringify(data.shape)
+                }
+            });
+            const message = JSON.stringify(data.shape);
+            users.forEach((el) => {
+                if (el.rooms.includes(data.roomID)) {
+                    el.ws.send(JSON.stringify({
+                        type: "move",
+                        message: message,
+                        userId: userId,
+                    }));
+                }
+            });
+        }
         if (data.type === "msg") {
             const roomId = data.roomID;
-            console.log(roomId, typeof roomId);
-            const userId = (_a = users.find((el => el.ws === ws))) === null || _a === void 0 ? void 0 : _a.userId;
+            console.log("Room ID:", roomId, typeof roomId);
+            if (!roomId) {
+                console.log("Error: roomID is missing or invalid.");
+                return;
+            }
+            const userId = (_b = users.find((el) => el.ws === ws)) === null || _b === void 0 ? void 0 : _b.userId;
             const message = JSON.stringify(data.shape);
             if (!userId) {
                 return;
@@ -101,10 +131,11 @@ wss.on("connection", (ws, request) => {
                 }
                 const chat = yield prisma.chat.create({
                     data: {
+                        id: data.shape.id,
                         roomId: roomId.toString(),
                         userId: userId,
-                        message: message
-                    }
+                        message: message,
+                    },
                 });
                 console.log(users, "RoomID", data.roomID);
                 users.forEach((el) => {
@@ -112,7 +143,7 @@ wss.on("connection", (ws, request) => {
                         el.ws.send(JSON.stringify({
                             type: "msg",
                             message: message,
-                            userId: userId
+                            userId: userId,
                         }));
                     }
                 });
