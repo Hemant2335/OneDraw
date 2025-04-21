@@ -31,7 +31,7 @@ const SignIn = () => {
 
             const data = await res.json();
             if (!data.status) {
-                return setWarning("Something Went Wrong");
+                return setWarning(data.error);
             }
             setUser(data.user);
             console.log(data);

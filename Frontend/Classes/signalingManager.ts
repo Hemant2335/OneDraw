@@ -1,13 +1,13 @@
 
 
 export class signalingManager {
-    private static instance : signalingManager;
+    private static instance : signalingManager | null;
     ws: WebSocket;
     roomId: string;
 
     constructor(roomId : string) {
         this.roomId = roomId;
-        this.ws = new WebSocket(`ws://af2c804dfa62c414d8993b893aa3369a-1544082881.ap-south-1.elb.amazonaws.com/websocket?token=${window.localStorage.getItem("token")}`);
+        this.ws = new WebSocket(`ws://localhost:8080/websocket?token=${window.localStorage.getItem("token")}`);
         this.ws.onopen = () => {
             const data = JSON.stringify({
                 type: "joinRoom",
@@ -24,8 +24,12 @@ export class signalingManager {
         return signalingManager.instance;
     }
 
-    public static closeConnection(){
-        signalingManager.instance.ws.close();
+    public closeConnection(){
+        if(signalingManager.instance) {
+            signalingManager.instance.ws.close();
+            signalingManager.instance = null;
+        }
+
     }
 
 }
