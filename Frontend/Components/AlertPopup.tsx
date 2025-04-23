@@ -8,7 +8,7 @@ import {
     AlertDialogHeader,
     AlertDialogTitle,
     AlertDialogTrigger,
-} from "@/components/ui/AlertDiag";
+} from "@/Components/ui/alert-dialog";
 import React from "react";
 import UrlCopyField from "@/Components/UrlCopyField";
 
