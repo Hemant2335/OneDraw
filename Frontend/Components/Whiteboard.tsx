@@ -7,6 +7,7 @@ import {ToolBar, Tooltype} from "@/Components/ToolBar";
 import {OfflineDrawHandler} from "@/Classes/OfflineDrawHandler";
 import {AlertPopup} from "@/Components/AlertPopup";
 import {Download} from "lucide-react";
+import toast from 'react-hot-toast';
 
 const Whiteboard: React.FC<{ roomId: string }> = ({ roomId }) => {
   const [instance, setInstance] = useState<signalingManager | null>(null);
@@ -29,6 +30,18 @@ const Whiteboard: React.FC<{ roomId: string }> = ({ roomId }) => {
     } else {
       // Create new instance
       const newInstance = signalingManager.getInstance(roomId);
+      if (newInstance.ws.readyState === WebSocket.CLOSED){
+        toast.error("Connection closed");
+        setInstance(null);
+        return;
+      }
+
+      newInstance.ws.onclose = () => {
+        toast('Disconnected from Friends!', {
+          icon: '🌑',});
+        setInstance(null);
+      }
+
       setInstance(newInstance);
     }
   };

@@ -117,6 +117,7 @@ export class OfflineDrawHandler {
     this.ctx.fillStyle = "white";
     this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
     this.drawGrid(this.canvas.width, this.canvas.width);
+    localStorage.setItem("shapes", JSON.stringify([]));
     this.shapes = [];
   }
 
