@@ -5,7 +5,26 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="e111901c-88b2-4201-afa9-c5cd60f320ee" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/Frontend/Components/AlertPopup.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Frontend/Components/ColorDrawer.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Frontend/Components/UrlCopyField.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Frontend/Components/ui/AlertDiag.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Frontend/Components/ui/PalleteCard.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Frontend/Components/ui/button.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Frontend/Components/ui/slider.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Frontend/Classes/DrawHandler.ts" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/Classes/DrawHandler.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Frontend/Classes/OfflineDrawHandler.ts" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/Classes/OfflineDrawHandler.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Frontend/Classes/signalingManager.ts" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/Classes/signalingManager.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Frontend/Components/Navbar.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/Components/Navbar.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Frontend/Components/ToolBar.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/Components/ToolBar.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Frontend/Components/Whiteboard.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/Components/Whiteboard.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Frontend/app/Whiteboard/[roomId]/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/app/Whiteboard/[roomId]/page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Frontend/app/globals.css" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/app/globals.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Frontend/app/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/app/page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Frontend/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Frontend/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Frontend/tailwind.config.ts" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/tailwind.config.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -15,8 +34,8 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="TypeScript JSX File" />
         <option value="TypeScript File" />
+        <option value="TypeScript JSX File" />
       </list>
     </option>
   </component>
@@ -148,6 +167,8 @@
       <workItem from="1744785563940" duration="1798000" />
       <workItem from="1744881701251" duration="9117000" />
       <workItem from="1745246388889" duration="10054000" />
+      <workItem from="1745302131912" duration="7861000" />
+      <workItem from="1745403694872" duration="5623000" />
     </task>
     <servers />
   </component>

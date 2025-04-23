@@ -1,35 +1,68 @@
-import {Circle, LineChart, Pencil, Square, Trash, Triangle} from "lucide-react"
+import {Circle, LineChart, Pencil, Square, Trash, Triangle} from "lucide-react";
 import React from "react";
 import {DrawHandler} from "@/Classes/DrawHandler";
 import {OfflineDrawHandler} from "@/Classes/OfflineDrawHandler";
 import {BsCursor} from "react-icons/bs";
 
-export type Tooltype ="pen" | "circle" | "rect" | "line" | "triangle" | "eraser" | "cursor";
+export type Tooltype = "pen" | "circle" | "rect" | "line" | "triangle" | "eraser" | "cursor";
 
-export const ToolBar: React.FC<{drawHandler: DrawHandler | OfflineDrawHandler | null, setTool: React.Dispatch<React.SetStateAction<Tooltype>> , tool:Tooltype}> = ({drawHandler , setTool , tool}) => {
-
-    const handleSelectTool = (tool : Tooltype) =>{
-        if(!drawHandler) return ;
+export const ToolBar: React.FC<{
+    drawHandler: DrawHandler | OfflineDrawHandler | null;
+    setTool: React.Dispatch<React.SetStateAction<Tooltype>>;
+    tool: Tooltype;
+}> = ({ drawHandler, setTool, tool }) => {
+    const handleSelectTool = (tool: Tooltype) => {
+        if (!drawHandler) return;
         setTool(tool);
         drawHandler.selectTool(tool);
-    }
+    };
 
-    const handleClear = () =>{
-        if(!drawHandler) return ;
+    const handleClear = () => {
+        if (!drawHandler) return;
         drawHandler.cleanCanvas();
-    }
+    };
+
+    const tools = [
+        { type: "cursor", icon: <BsCursor size={20} />, label: "Select" },
+        { type: "pen", icon: <Pencil size={20} />, label: "Pen" },
+        { type: "rect", icon: <Square size={20} />, label: "Rectangle" },
+        { type: "circle", icon: <Circle size={20} />, label: "Circle" },
+        { type: "triangle", icon: <Triangle size={20} />, label: "Triangle" },
+        { type: "line", icon: <LineChart size={20} />, label: "Line" },
+    ];
 
     return (
-        <div className="w-full h-[5rem] py-5 flex justify-center items-center shadow-xl  bg-white">
-            <div className="w-fit flex justify-center rounded-lg items-center gap-5 bg-[#FAFAFA] shadow-xl p-3 h-full ">
-                <BsCursor onClick={()=>handleSelectTool('cursor')} size={24} className={`text-black cursor-pointer ${tool == 'cursor' && 'text-blue-400'}`}/>
-                <Square onClick={()=>handleSelectTool('rect')} size={24} className={`text-black cursor-pointer ${tool == 'rect' && 'text-blue-400'}`}/>
-                <Pencil onClick={()=>handleSelectTool('pen')} size={24} className={`text-black cursor-pointer ${tool == 'pen' && 'text-blue-400'}`}/>
-                <Circle onClick={()=>handleSelectTool('circle')} size={24} className={`text-black cursor-pointer ${tool == 'circle' && 'text-blue-400'}`}/>
-                <Triangle onClick={()=>handleSelectTool('triangle')} size={24} className={`text-black cursor-pointer ${tool == 'triangle' && 'text-blue-400'}`}/>
-                <LineChart onClick={()=>handleSelectTool('line')} size={24} className={`text-black cursor-pointer ${tool == 'line' && 'text-blue-400'}`}/>
-                <Trash onClick={()=>handleClear()} size={24} className="text-red-400 cursor-pointer"/>
+        <div className="fixed bottom-6 left-1/2 transform -translate-x-1/2 z-50">
+            <div className="flex items-center gap-1 bg-white/90 backdrop-blur-md rounded-full shadow-lg p-2 border border-gray-200">
+                {tools.map(({ type, icon, label }) => (
+                    <button
+                        key={type}
+                        onClick={() => handleSelectTool(type as Tooltype)}
+                        className={`p-3 rounded-full flex flex-col items-center justify-center transition-all ${
+                            tool === type
+                                ? "bg-blue-50 text-blue-600"
+                                : "text-gray-600 hover:bg-gray-100"
+                        }`}
+                        aria-label={label}
+                    >
+                        <div className={`${tool === type ? "scale-110" : "scale-100"}`}>
+                            {icon}
+                        </div>
+                        <span className="text-xs mt-1">{label}</span>
+                    </button>
+                ))}
+
+                <div className="h-8 w-px bg-gray-300 mx-1"></div>
+
+                <button
+                    onClick={handleClear}
+                    className="p-3 rounded-full flex flex-col items-center justify-center text-red-500 hover:bg-red-50 transition-colors"
+                    aria-label="Clear canvas"
+                >
+                    <Trash size={20} />
+                    <span className="text-xs mt-1">Clear</span>
+                </button>
             </div>
         </div>
-    )
-}
+    );
+};
