@@ -3,6 +3,7 @@ import "./globals.css";
 import {Providers} from "./provider";
 import React from "react";
 import Navbar from "@/Components/Navbar";
+import {Toaster} from "react-hot-toast";
 
 
 export const metadata: Metadata = {
@@ -21,6 +22,7 @@ export default function RootLayout({
         <Providers>
             <Navbar />
             {children}
+            <Toaster />
         </Providers>
         </body>
         </html>

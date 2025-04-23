@@ -7,7 +7,7 @@ export default function Home() {
         <div className="p-4 my-10 flex h-[30rem]">
           <div className="mockup-browser border-base-300 border-2 shadow-2xl w-full h-full">
             <div className="mockup-browser-toolbar">
-              <div className="input border-base-300 border">
+              <div className="input border-base-300 border text-white">
                 https://onedraw.com
               </div>
             </div>

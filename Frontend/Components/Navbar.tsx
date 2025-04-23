@@ -48,13 +48,13 @@ const Navbar = () => {
 
 
   return (
-    <div className={`w-full mt-[4vh] h-[5vh]  items-center justify-center ${pathname !== "/" ? "hidden" : "flex"} `}>
-      <div className="bg-[#121212] w-fit h-fit  p-3 title rounded-md fixed z-10">
+    <div className={`w-full bg-[#121212] mt-[4vh] h-[5vh] text-white  items-center justify-center ${pathname !== "/" ? "hidden" : "flex"} `}>
+      <div className=" w-fit h-fit  p-3 title rounded-md fixed z-10">
         <nav className={`flex  justify-between w-[90vw] h-[5vh]`}>
           <div className={`flex gap-[3vw]`}>
-            <h1 className={`text-2xl font-bold`}>OneDraw</h1>
+            <h1 className={`text-2xl font-bold `}>OneDraw</h1>
             <ul className="flex items-center font-medium gap-[3vh] text-md">
-              <li className="hover:text-[#097969] cursor-pointer transition-transform nav-home ">
+              <li className="hover:text-[#097969]  cursor-pointer transition-transform nav-home ">
                 Pricing
               </li>
               <li className="hover:text-[#097969] cursor-pointer transition-transform nav-About">
@@ -64,7 +64,7 @@ const Navbar = () => {
           </div>
           <div className={`flex gap-2`}>
             {(typeof window != 'undefined' && localStorage.getItem("token")) ? (
-              <button onClick={()=>{handleWhiteboard()}} className="bg-primary w-fit py-3 flex items-center  px-[2vw] text-white rounded-md">
+              <button onClick={()=>{handleWhiteboard()}} className="bg-[#097969] w-fit py-3 flex items-center  px-[2vw] text-white rounded-md">
                   {isLoading ? `Loading...` : `Whiteboard`}
               </button>
             ) : (

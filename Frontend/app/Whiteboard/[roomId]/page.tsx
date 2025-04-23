@@ -12,7 +12,7 @@ const WhiteboardPage = () => {
     }, [pathname]); // Dependency on pathname
 
     return (
-        <div>
+        <div className="hideScrollbar">
             <Whiteboard roomId={pathname.split("/")[2]} /> {/* Pass roomId */}
         </div>
     );

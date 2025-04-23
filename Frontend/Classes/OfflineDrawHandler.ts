@@ -105,7 +105,8 @@ export class OfflineDrawHandler {
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
     this.ctx.fillStyle = "white";
     this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
-
+    // Draw grid
+    this.drawGrid(this.canvas.width, this.canvas.width);
     this.shapes.forEach((shape) => {
       this.draw(shape);
     });
@@ -115,6 +116,8 @@ export class OfflineDrawHandler {
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
     this.ctx.fillStyle = "white";
     this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+    this.drawGrid(this.canvas.width, this.canvas.width);
+    localStorage.setItem("shapes", JSON.stringify([]));
     this.shapes = [];
   }
 
@@ -462,6 +465,30 @@ export class OfflineDrawHandler {
       this.dragStart = null;
     }
   }
+
+  drawGrid = (width : number, height : number) => {
+    const gridSize = 20; // Size of each grid square in pixels
+    const gridColor = '#e0e0e0'; // Light gray color for grid
+
+    this.ctx.strokeStyle = gridColor;
+    this.ctx.lineWidth = 1;
+
+    // Draw vertical lines
+    for (let x = 0; x <= width; x += gridSize) {
+      this.ctx.beginPath();
+      this.ctx.moveTo(x, 0);
+      this.ctx.lineTo(x, height);
+      this.ctx.stroke();
+    }
+
+    // Draw horizontal lines
+    for (let y = 0; y <= height; y += gridSize) {
+      this.ctx.beginPath();
+      this.ctx.moveTo(0, y);
+      this.ctx.lineTo(width, y);
+      this.ctx.stroke();
+    }
+  };
 
   resizeShape(mouseX: number, mouseY: number) {
     if (!this.SelectedShape || !this.currentResizeHandle) return;
