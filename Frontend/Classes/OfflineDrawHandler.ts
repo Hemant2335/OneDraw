@@ -1,12 +1,14 @@
 import {Tooltype} from "@/Components/ToolBar";
 
-type Shape =
+export type Shape =
   | {
       name: "circle";
       x: number;
       y: number;
       radius: number;
       color: string;
+      lineWidth: number;
+      background: string;
     }
   | {
       name: "rect";
@@ -15,6 +17,8 @@ type Shape =
       color: string;
       Width: number;
       Height: number;
+      lineWidth: number;
+      background: string;
     }
   | {
       name: "pen";
@@ -23,6 +27,7 @@ type Shape =
       endx: number;
       endy: number;
       color: string;
+      lineWidth: number;
     }
   | {
       name: "line";
@@ -31,6 +36,7 @@ type Shape =
       endX: number;
       endY: number;
       color: string;
+      lineWidth: number;
     }
   | {
       name: "triangle";
@@ -41,6 +47,8 @@ type Shape =
       x3: number;
       y3: number;
       color: string;
+      lineWidth: number;
+      background: string;
     }
   | {
       name: "eraser";
@@ -57,6 +65,8 @@ export class OfflineDrawHandler {
   private lastY: number;
   private SelectedColor: string;
   private SelectedTool: Tooltype;
+    private SelectedLineWidth: number;
+    private SelectedBackground: string;
   private shapes: Shape[] = [];
   private isDragging: boolean;
   private dragStart: { x: number; y: number } | null = null;
@@ -74,6 +84,8 @@ export class OfflineDrawHandler {
     this.isDragging = false;
     this.SelectedColor = "black";
     this.SelectedTool = "rect";
+    this.SelectedLineWidth =  2;
+    this.SelectedBackground = "white";
     this.shapes = [];
     this.controller = new AbortController();
     this.init();
@@ -99,6 +111,14 @@ export class OfflineDrawHandler {
 
   selectTool(tool: Tooltype) {
     this.SelectedTool = tool;
+  }
+
+  selectLineWidth(width: number) {
+    this.SelectedLineWidth = width;
+  }
+
+  selectBackground(color: string) {
+    this.SelectedBackground = color;
   }
 
   clearCanvas() {
@@ -368,37 +388,47 @@ export class OfflineDrawHandler {
   }
 
   draw(shape: Shape) {
+
     if (shape.name === "rect") {
       this.ctx.strokeStyle = shape.color;
+      this.ctx.lineWidth = shape.lineWidth;
+      this.ctx.fillStyle = shape.background;
+      this.ctx.fillRect(shape.x, shape.y, shape.Width, shape.Height);
       this.ctx.strokeRect(shape.x, shape.y, shape.Width, shape.Height);
     } else if (shape.name === "circle") {
       this.ctx.strokeStyle = shape.color;
+      this.ctx.lineWidth = shape.lineWidth;
+      this.ctx.fillStyle = shape.background;
       this.ctx.beginPath();
+
       this.ctx.arc(shape.x, shape.y, shape.radius, 0, Math.PI * 2);
       this.ctx.stroke();
+      this.ctx.fill();
     } else if (shape.name === "pen") {
       this.ctx.strokeStyle = shape.color;
-      this.ctx.lineWidth = 2;
+      this.ctx.lineWidth = shape.lineWidth;
       this.ctx.beginPath();
       this.ctx.moveTo(shape.startx, shape.starty);
       this.ctx.lineTo(shape.endx, shape.endy);
       this.ctx.stroke();
     } else if (shape.name === "line") {
       this.ctx.strokeStyle = shape.color;
-      this.ctx.lineWidth = 2;
+      this.ctx.lineWidth = shape.lineWidth;
       this.ctx.beginPath();
       this.ctx.moveTo(shape.startX, shape.startY);
       this.ctx.lineTo(shape.endX, shape.endY);
       this.ctx.stroke();
     } else if (shape.name === "triangle") {
       this.ctx.strokeStyle = shape.color;
-      this.ctx.lineWidth = 2;
+      this.ctx.lineWidth = shape.lineWidth;
+      this.ctx.fillStyle = shape.background;
       this.ctx.beginPath();
       this.ctx.moveTo(shape.x1, shape.y1);
       this.ctx.lineTo(shape.x2, shape.y2);
       this.ctx.lineTo(shape.x3, shape.y3);
       this.ctx.closePath();
       this.ctx.stroke();
+      this.ctx.fill();
     } else if (shape.name === "eraser") {
       this.ctx.clearRect(
         shape.x - shape.size / 2,
@@ -466,9 +496,9 @@ export class OfflineDrawHandler {
     }
   }
 
-  drawGrid = (width : number, height : number) => {
+  drawGrid = (width: number, height: number) => {
     const gridSize = 20; // Size of each grid square in pixels
-    const gridColor = '#e0e0e0'; // Light gray color for grid
+    const gridColor = "#e0e0e0"; // Light gray color for grid
 
     this.ctx.strokeStyle = gridColor;
     this.ctx.lineWidth = 1;
@@ -593,15 +623,19 @@ export class OfflineDrawHandler {
             x: this.lastX,
             y: this.lastY,
             color: this.SelectedColor,
+            lineWidth : this.SelectedLineWidth,
+            background: this.SelectedBackground,
             Width: width,
             Height: height,
           };
         } else if (this.SelectedTool == "circle") {
-          const radius = Math.max(width, height) / 2;
+          const radius = Math.abs(Math.max(width, height) / 2) ;
           shape = {
             name: "circle",
             x: this.lastX + radius,
             y: this.lastY + radius,
+            lineWidth : this.SelectedLineWidth,
+            background: this.SelectedBackground,
             color: this.SelectedColor,
             radius: radius,
           };
@@ -613,6 +647,7 @@ export class OfflineDrawHandler {
             endx: e.offsetX,
             endy: e.offsetY,
             color: this.SelectedColor,
+            lineWidth : this.SelectedLineWidth,
           };
         } else if (this.SelectedTool == "line") {
           shape = {
@@ -622,6 +657,7 @@ export class OfflineDrawHandler {
             endX: e.offsetX,
             endY: e.offsetY,
             color: this.SelectedColor,
+            lineWidth : this.SelectedLineWidth,
           };
         } else if (this.SelectedTool == "triangle") {
           shape = {
@@ -633,6 +669,8 @@ export class OfflineDrawHandler {
             x3: this.lastX + (e.offsetX - this.lastX) / 2,
             y3: this.lastY - (e.offsetY - this.lastY),
             color: this.SelectedColor,
+            lineWidth : this.SelectedLineWidth,
+            background: this.SelectedBackground,
           };
         } else if (this.SelectedTool == "eraser") {
           shape = {
@@ -711,16 +749,20 @@ export class OfflineDrawHandler {
             color: this.SelectedColor,
             Width: width,
             Height: height,
+            lineWidth : this.SelectedLineWidth,
+            background: this.SelectedBackground,
           };
           this.draw(shape);
         } else if (selectedTool == "circle") {
-          const radius = Math.max(width, height) / 2;
+          const radius = Math.abs(Math.max(width, height) / 2) ;
           const shape: Shape = {
             name: "circle",
             x: this.lastX + radius,
             y: this.lastY + radius,
             color: this.SelectedColor,
             radius: radius,
+            lineWidth : this.SelectedLineWidth,
+            background: this.SelectedBackground,
           };
           this.draw(shape);
         } else if (selectedTool == "pen") {
@@ -729,6 +771,7 @@ export class OfflineDrawHandler {
             startx: this.lastX,
             starty: this.lastY,
             endx: e.offsetX,
+            lineWidth : this.SelectedLineWidth,
             endy: e.offsetY,
             color: this.SelectedColor,
           };
@@ -744,6 +787,7 @@ export class OfflineDrawHandler {
             startY: this.lastY,
             endX: e.offsetX,
             endY: e.offsetY,
+            lineWidth : this.SelectedLineWidth,
             color: this.SelectedColor,
           };
           this.draw(shape);
@@ -757,6 +801,8 @@ export class OfflineDrawHandler {
             x3: this.lastX + (e.offsetX - this.lastX) / 2,
             y3: this.lastY - (e.offsetY - this.lastY),
             color: this.SelectedColor,
+            lineWidth : this.SelectedLineWidth,
+            background: this.SelectedBackground,
           };
           this.draw(shape);
         } else if (selectedTool == "eraser") {

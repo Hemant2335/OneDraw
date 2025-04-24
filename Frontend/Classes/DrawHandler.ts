@@ -4,42 +4,48 @@ import {nanoid} from "nanoid";
 
 type Shape =
   | {
-      id : string;
+      id: string;
       name: "circle";
       x: number;
       y: number;
       radius: number;
       color: string;
+      lineWidth: number;
+      background: string;
     }
   | {
-      id : string;
+      id: string;
       name: "rect";
       x: number;
       y: number;
       color: string;
       Width: number;
       Height: number;
+      lineWidth: number;
+      background: string;
     }
   | {
-      id : string;
+      id: string;
       name: "pen";
       startx: number;
       starty: number;
       endx: number;
       endy: number;
       color: string;
+      lineWidth: number;
     }
   | {
-      id : string;
+      id: string;
       name: "line";
       startX: number;
       startY: number;
       endX: number;
       endY: number;
       color: string;
+      lineWidth: number;
     }
   | {
-      id : string;
+      id: string;
       name: "triangle";
       x1: number;
       y1: number;
@@ -48,6 +54,8 @@ type Shape =
       x3: number;
       y3: number;
       color: string;
+      lineWidth: number;
+      background: string;
     }
   | {
       name: "eraser";
@@ -64,6 +72,8 @@ export class DrawHandler {
   private lastY: number;
   private SelectedColor: string;
   private SelectedTool: Tooltype;
+  private SelectedLineWidth: number;
+  private SelectedBackground: string;
   private readonly roomID: string;
   private socket: WebSocket;
   private shapes: Shape[] = [];
@@ -82,6 +92,8 @@ export class DrawHandler {
     this.lastY = 0;
     this.SelectedColor = "black";
     this.SelectedTool = "rect";
+    this.SelectedLineWidth =  2;
+    this.SelectedBackground = "white";
     this.isDragging = false;
     this.shapes = [];
     this.roomID = roomID;
@@ -103,6 +115,14 @@ export class DrawHandler {
     this.SelectedColor = color;
   }
 
+  selectLineWidth(width: number) {
+    this.SelectedLineWidth = width;
+  }
+
+    selectBackground(color: string) {
+        this.SelectedBackground = color;
+    }
+
   selectTool(tool: Tooltype) {
     this.SelectedTool = tool;
   }
@@ -116,18 +136,17 @@ export class DrawHandler {
         this.shapes.push(shape);
         this.clearCanvas();
       }
-      if(data.type === "move") {
+      if (data.type === "move") {
         this.shapes = this.shapes.map((el) => {
-            if (el.name != "eraser" && el.id === shape.id) {
-                return shape;
-            }
-            return el;
-        })
+          if (el.name != "eraser" && el.id === shape.id) {
+            return shape;
+          }
+          return el;
+        });
         this.clearCanvas();
       }
     };
   }
-
 
   clearCanvas() {
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
@@ -401,43 +420,53 @@ export class DrawHandler {
   }
 
   draw(shape: Shape) {
+
     if (shape.name === "rect") {
       this.ctx.strokeStyle = shape.color;
+      this.ctx.lineWidth = shape.lineWidth;
+      this.ctx.fillStyle = shape.background;
+      this.ctx.fillRect(shape.x, shape.y, shape.Width, shape.Height);
       this.ctx.strokeRect(shape.x, shape.y, shape.Width, shape.Height);
     } else if (shape.name === "circle") {
       this.ctx.strokeStyle = shape.color;
+      this.ctx.lineWidth = shape.lineWidth;
+      this.ctx.fillStyle = shape.background;
       this.ctx.beginPath();
+
       this.ctx.arc(shape.x, shape.y, shape.radius, 0, Math.PI * 2);
       this.ctx.stroke();
+      this.ctx.fill();
     } else if (shape.name === "pen") {
       this.ctx.strokeStyle = shape.color;
-      this.ctx.lineWidth = 2;
+      this.ctx.lineWidth = shape.lineWidth;
       this.ctx.beginPath();
       this.ctx.moveTo(shape.startx, shape.starty);
       this.ctx.lineTo(shape.endx, shape.endy);
       this.ctx.stroke();
     } else if (shape.name === "line") {
       this.ctx.strokeStyle = shape.color;
-      this.ctx.lineWidth = 2;
+      this.ctx.lineWidth = shape.lineWidth;
       this.ctx.beginPath();
       this.ctx.moveTo(shape.startX, shape.startY);
       this.ctx.lineTo(shape.endX, shape.endY);
       this.ctx.stroke();
     } else if (shape.name === "triangle") {
       this.ctx.strokeStyle = shape.color;
-      this.ctx.lineWidth = 2;
+      this.ctx.lineWidth = shape.lineWidth;
+      this.ctx.fillStyle = shape.background;
       this.ctx.beginPath();
       this.ctx.moveTo(shape.x1, shape.y1);
       this.ctx.lineTo(shape.x2, shape.y2);
       this.ctx.lineTo(shape.x3, shape.y3);
       this.ctx.closePath();
       this.ctx.stroke();
+      this.ctx.fill();
     } else if (shape.name === "eraser") {
       this.ctx.clearRect(
-        shape.x - shape.size / 2,
-        shape.y - shape.size / 2,
-        shape.size,
-        shape.size,
+          shape.x - shape.size / 2,
+          shape.y - shape.size / 2,
+          shape.size,
+          shape.size,
       );
     }
 
@@ -446,9 +475,9 @@ export class DrawHandler {
     }
   }
 
-  drawGrid = (width : number, height : number) => {
+  drawGrid = (width: number, height: number) => {
     const gridSize = 20; // Size of each grid square in pixels
-    const gridColor = '#e0e0e0'; // Light gray color for grid
+    const gridColor = "#e0e0e0"; // Light gray color for grid
 
     this.ctx.strokeStyle = gridColor;
     this.ctx.lineWidth = 1;
@@ -573,257 +602,290 @@ export class DrawHandler {
   }
 
   initMouseEvents() {
-    this.canvas.addEventListener("click", (e) => {
-      this.lastX = e.offsetX;
-      this.lastY = e.offsetY;
-      if (this.SelectedTool == "cursor") {
-        // Finding the shape to drag
-        this.SelectShape();
-      }
-    } , {signal: this.controller.signal});
-    this.canvas.addEventListener("mousedown", (e) => {
-      this.isDrawing = true;
-      this.lastX = e.offsetX;
-      this.lastY = e.offsetY;
-      if (this.SelectedTool == "cursor" && this.SelectedShape) {
-        // First check if the user is trying to resize the shape
-        const mouseX = e.clientX - this.canvas.offsetLeft;
-        const mouseY = e.clientY - this.canvas.offsetTop;
-        console.log(mouseX, mouseY);
-        const handle = this.getHandleAtPosition(mouseX, mouseY);
-        console.log("Handle", handle);
-        if (handle) {
-          this.currentResizeHandle = handle;
-          return;
+    this.canvas.addEventListener(
+      "click",
+      (e) => {
+        this.lastX = e.offsetX;
+        this.lastY = e.offsetY;
+        if (this.SelectedTool == "cursor") {
+          // Finding the shape to drag
+          this.SelectShape();
         }
-
-        this.SelectShape();
-        this.dragStart = { x: this.lastX, y: this.lastY };
-        this.isDragging = true;
-      }
-    } , {signal: this.controller.signal});
-
-    this.canvas.addEventListener("mouseup", (e) => {
-      this.isDrawing = false;
-      const width = e.offsetX - this.lastX;
-      const height = e.offsetY - this.lastY;
-      let shape: Shape;
-
-      if (this.isDragging) {
-        this.isDragging = false;
-        this.dragStart = null;
-        this.SelectedShape = undefined;
-        return;
-      }
-      if (this.currentResizeHandle) {
-        this.currentResizeHandle = null;
-        return;
-      }
-
-      if (this.SelectedTool == "rect") {
-        shape = {
-          id : nanoid(),
-          name: "rect",
-          x: this.lastX,
-          y: this.lastY,
-          color: this.SelectedColor,
-          Width: width,
-          Height: height,
-        };
-      } else if (this.SelectedTool == "circle") {
-        const radius = Math.max(width, height) / 2;
-        shape = {
-            id : nanoid(),
-          name: "circle",
-          x: this.lastX + radius,
-          y: this.lastY + radius,
-          color: this.SelectedColor,
-          radius: radius,
-        };
-      } else if (this.SelectedTool == "pen") {
-        shape = {
-            id : nanoid(),
-          name: "pen",
-          startx: this.lastX,
-          starty: this.lastY,
-          endx: e.offsetX,
-          endy: e.offsetY,
-          color: this.SelectedColor,
-        };
-      } else if (this.SelectedTool == "line") {
-        shape = {
-            id : nanoid(),
-          name: "line",
-          startX: this.lastX,
-          startY: this.lastY,
-          endX: e.offsetX,
-          endY: e.offsetY,
-          color: this.SelectedColor,
-        };
-      } else if (this.SelectedTool == "triangle") {
-        shape = {
-            id : nanoid(),
-          name: "triangle",
-          x1: this.lastX,
-          y1: this.lastY,
-          x2: e.offsetX,
-          y2: e.offsetY,
-          x3: this.lastX + (e.offsetX - this.lastX) / 2,
-          y3: this.lastY - (e.offsetY - this.lastY),
-          color: this.SelectedColor,
-        };
-      } else if (this.SelectedTool == "eraser") {
-        shape = {
-          name: "eraser",
-          x: e.offsetX,
-          y: e.offsetY,
-          size: 20, // Adjust eraser size as needed
-        };
-      }
-
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-expect-error
-      if (shape) {
-        this.shapes.push(shape);
-        this.socket.send(
-          JSON.stringify({
-            type: "msg",
-            shape: shape,
-            roomID: this.roomID,
-          }),
-        );
-      }
-    } , {signal: this.controller.signal});
-
-    this.canvas.addEventListener("mousemove", (e) => {
-      if (!this.isDrawing) {
-        return;
-      }
-      if (
-        this.SelectedTool == "cursor" &&
-        this.SelectedShape &&
-        this.currentResizeHandle
-      ) {
-        const mouseX = e.clientX - this.canvas.offsetLeft;
-        const mouseY = e.clientY - this.canvas.offsetTop;
-        console.log("resizing shape");
-        this.resizeShape(mouseX, mouseY);
-      }
-      if (this.isDragging) {
-        if (!this.dragStart) {
-          return;
-        }
-        const dx = e.offsetX - this.dragStart.x;
-        const dy = e.offsetY - this.dragStart.y;
-        if (this.SelectedShape) {
-          if (this.SelectedShape.name == "rect") {
-            this.SelectedShape.x += dx;
-            this.SelectedShape.y += dy;
-          } else if (this.SelectedShape.name == "circle") {
-            this.SelectedShape.x += dx;
-            this.SelectedShape.y += dy;
-          } else if (this.SelectedShape.name == "triangle") {
-            this.SelectedShape.x1 += dx;
-            this.SelectedShape.x2 += dx;
-            this.SelectedShape.x3 += dx;
-            this.SelectedShape.y1 += dy;
-            this.SelectedShape.y2 += dy;
-            this.SelectedShape.y3 += dy;
+      },
+      { signal: this.controller.signal },
+    );
+    this.canvas.addEventListener(
+      "mousedown",
+      (e) => {
+        this.isDrawing = true;
+        this.lastX = e.offsetX;
+        this.lastY = e.offsetY;
+        if (this.SelectedTool == "cursor" && this.SelectedShape) {
+          // First check if the user is trying to resize the shape
+          const mouseX = e.clientX - this.canvas.offsetLeft;
+          const mouseY = e.clientY - this.canvas.offsetTop;
+          console.log(mouseX, mouseY);
+          const handle = this.getHandleAtPosition(mouseX, mouseY);
+          console.log("Handle", handle);
+          if (handle) {
+            this.currentResizeHandle = handle;
+            return;
           }
+
+          this.SelectShape();
+          this.dragStart = { x: this.lastX, y: this.lastY };
+          this.isDragging = true;
         }
-        this.clearCanvas();
-        this.socket.send(
+      },
+      { signal: this.controller.signal },
+    );
+
+    this.canvas.addEventListener(
+      "mouseup",
+      (e) => {
+        this.isDrawing = false;
+        const width = e.offsetX - this.lastX;
+        const height = e.offsetY - this.lastY;
+        let shape: Shape;
+
+        if (this.isDragging) {
+          this.isDragging = false;
+          this.dragStart = null;
+          this.SelectedShape = undefined;
+          return;
+        }
+        if (this.currentResizeHandle) {
+          this.currentResizeHandle = null;
+          return;
+        }
+
+        if (this.SelectedTool == "rect") {
+          shape = {
+            id: nanoid(),
+            name: "rect",
+            x: this.lastX,
+            y: this.lastY,
+            color: this.SelectedColor,
+            lineWidth : this.SelectedLineWidth,
+            background: this.SelectedBackground,
+            Width: width,
+            Height: height,
+          };
+        } else if (this.SelectedTool == "circle") {
+          const radius = Math.max(width, height) / 2;
+          shape = {
+            id: nanoid(),
+            name: "circle",
+            x: this.lastX + radius,
+            y: this.lastY + radius,
+            color: this.SelectedColor,
+            lineWidth : this.SelectedLineWidth,
+            background: this.SelectedBackground,
+            radius: radius,
+          };
+        } else if (this.SelectedTool == "pen") {
+          shape = {
+            id: nanoid(),
+            name: "pen",
+            startx: this.lastX,
+            starty: this.lastY,
+            endx: e.offsetX,
+            endy: e.offsetY,
+            lineWidth : this.SelectedLineWidth,
+            color: this.SelectedColor,
+          };
+        } else if (this.SelectedTool == "line") {
+          shape = {
+            id: nanoid(),
+            name: "line",
+            startX: this.lastX,
+            startY: this.lastY,
+            endX: e.offsetX,
+            endY: e.offsetY,
+            color: this.SelectedColor,
+            lineWidth : this.SelectedLineWidth,
+          };
+        } else if (this.SelectedTool == "triangle") {
+          shape = {
+            id: nanoid(),
+            name: "triangle",
+            x1: this.lastX,
+            y1: this.lastY,
+            x2: e.offsetX,
+            y2: e.offsetY,
+            x3: this.lastX + (e.offsetX - this.lastX) / 2,
+            y3: this.lastY - (e.offsetY - this.lastY),
+            color: this.SelectedColor,
+            lineWidth : this.SelectedLineWidth,
+            background: this.SelectedBackground,
+          };
+        } else if (this.SelectedTool == "eraser") {
+          shape = {
+            name: "eraser",
+            x: e.offsetX,
+            y: e.offsetY,
+            size: 20, // Adjust eraser size as needed
+          };
+        }
+
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-expect-error
+        if (shape) {
+          this.shapes.push(shape);
+          this.socket.send(
+            JSON.stringify({
+              type: "msg",
+              shape: shape,
+              roomID: this.roomID,
+            }),
+          );
+        }
+      },
+      { signal: this.controller.signal },
+    );
+
+    this.canvas.addEventListener(
+      "mousemove",
+      (e) => {
+        if (!this.isDrawing) {
+          return;
+        }
+        if (
+          this.SelectedTool == "cursor" &&
+          this.SelectedShape &&
+          this.currentResizeHandle
+        ) {
+          const mouseX = e.clientX - this.canvas.offsetLeft;
+          const mouseY = e.clientY - this.canvas.offsetTop;
+          console.log("resizing shape");
+          this.resizeShape(mouseX, mouseY);
+        }
+        if (this.isDragging) {
+          if (!this.dragStart) {
+            return;
+          }
+          const dx = e.offsetX - this.dragStart.x;
+          const dy = e.offsetY - this.dragStart.y;
+          if (this.SelectedShape) {
+            if (this.SelectedShape.name == "rect") {
+              this.SelectedShape.x += dx;
+              this.SelectedShape.y += dy;
+            } else if (this.SelectedShape.name == "circle") {
+              this.SelectedShape.x += dx;
+              this.SelectedShape.y += dy;
+            } else if (this.SelectedShape.name == "triangle") {
+              this.SelectedShape.x1 += dx;
+              this.SelectedShape.x2 += dx;
+              this.SelectedShape.x3 += dx;
+              this.SelectedShape.y1 += dy;
+              this.SelectedShape.y2 += dy;
+              this.SelectedShape.y3 += dy;
+            }
+          }
+          this.clearCanvas();
+          this.socket.send(
             JSON.stringify({
               type: "move",
               shape: this.SelectedShape,
               roomID: this.roomID,
             }),
-        );
-        this.dragStart = { x: e.offsetX, y: e.offsetY };
-        return;
-      }
+          );
+          this.dragStart = { x: e.offsetX, y: e.offsetY };
+          return;
+        }
 
-      const width = e.offsetX - this.lastX;
-      const height = e.offsetY - this.lastY;
-      this.clearCanvas();
-      const selectedTool = this.SelectedTool;
+        const width = e.offsetX - this.lastX;
+        const height = e.offsetY - this.lastY;
+        this.clearCanvas();
+        const selectedTool = this.SelectedTool;
 
-      if (selectedTool == "rect") {
-        const shape: Shape = {
-          id : nanoid(),
-          name: "rect",
-          x: this.lastX,
-          y: this.lastY,
-          color: this.SelectedColor,
-          Width: width,
-          Height: height,
-        };
-        this.draw(shape);
-      } else if (selectedTool == "circle") {
-        const radius = Math.max(width, height) / 2;
-        const shape: Shape = {
-            id : nanoid(),
-          name: "circle",
-          x: this.lastX + radius,
-          y: this.lastY + radius,
-          color: this.SelectedColor,
-          radius: radius,
-        };
-        this.draw(shape);
-      } else if (selectedTool == "pen") {
-        const shape: Shape = {
-            id : nanoid(),
-          name: "pen",
-          startx: this.lastX,
-          starty: this.lastY,
-          endx: e.offsetX,
-          endy: e.offsetY,
-          color: this.SelectedColor,
-        };
-        this.draw(shape);
-        this.shapes.push(shape);
-        this.socket.send(
-          JSON.stringify({
-            type: "msg",
-            shape: shape,
-            roomID: this.roomID,
-          }),
-        );
-        this.lastX = e.offsetX;
-        this.lastY = e.offsetY;
-      } else if (selectedTool == "line") {
-        const shape: Shape = {
-            id : nanoid(),
-          name: "line",
-          startX: this.lastX,
-          startY: this.lastY,
-          endX: e.offsetX,
-          endY: e.offsetY,
-          color: this.SelectedColor,
-        };
-        this.draw(shape);
-      } else if (selectedTool == "triangle") {
-        const shape: Shape = {
-            id : nanoid(),
-          name: "triangle",
-          x1: this.lastX,
-          y1: this.lastY,
-          x2: e.offsetX,
-          y2: e.offsetY,
-          x3: this.lastX + (e.offsetX - this.lastX) / 2,
-          y3: this.lastY - (e.offsetY - this.lastY),
-          color: this.SelectedColor,
-        };
-        this.draw(shape);
-      } else if (selectedTool == "eraser") {
-        const shape: Shape = {
-          name: "eraser",
-          x: e.offsetX,
-          y: e.offsetY,
-          size: 20, // Adjust eraser size as needed
-        };
-        this.draw(shape);
-      }
-    } , {signal: this.controller.signal});
+        if (selectedTool == "rect") {
+          const shape: Shape = {
+            id: nanoid(),
+            name: "rect",
+            x: this.lastX,
+            y: this.lastY,
+            color: this.SelectedColor,
+            lineWidth : this.SelectedLineWidth,
+            background: this.SelectedBackground,
+            Width: width,
+            Height: height,
+          };
+          this.draw(shape);
+        } else if (selectedTool == "circle") {
+          const radius = Math.max(width, height) / 2;
+          const shape: Shape = {
+            id: nanoid(),
+            name: "circle",
+            x: this.lastX + radius,
+            y: this.lastY + radius,
+            color: this.SelectedColor,
+            lineWidth : this.SelectedLineWidth,
+            background: this.SelectedBackground,
+            radius: radius,
+          };
+          this.draw(shape);
+        } else if (selectedTool == "pen") {
+          const shape: Shape = {
+            id: nanoid(),
+            name: "pen",
+            startx: this.lastX,
+            starty: this.lastY,
+            endx: e.offsetX,
+            endy: e.offsetY,
+            color: this.SelectedColor,
+            lineWidth : this.SelectedLineWidth,
+          };
+          this.draw(shape);
+          this.shapes.push(shape);
+          this.socket.send(
+            JSON.stringify({
+              type: "msg",
+              shape: shape,
+              roomID: this.roomID,
+            }),
+          );
+          this.lastX = e.offsetX;
+          this.lastY = e.offsetY;
+
+        } else if (selectedTool == "line") {
+          const shape: Shape = {
+            id: nanoid(),
+            name: "line",
+            startX: this.lastX,
+            startY: this.lastY,
+            endX: e.offsetX,
+            endY: e.offsetY,
+            color: this.SelectedColor,
+            lineWidth : this.SelectedLineWidth,
+          };
+          this.draw(shape);
+        } else if (selectedTool == "triangle") {
+          const shape: Shape = {
+            id: nanoid(),
+            name: "triangle",
+            x1: this.lastX,
+            y1: this.lastY,
+            x2: e.offsetX,
+            y2: e.offsetY,
+            x3: this.lastX + (e.offsetX - this.lastX) / 2,
+            y3: this.lastY - (e.offsetY - this.lastY),
+            color: this.SelectedColor,
+            lineWidth : this.SelectedLineWidth,
+            background: this.SelectedBackground,
+          };
+          this.draw(shape);
+        } else if (selectedTool == "eraser") {
+          const shape: Shape = {
+            name: "eraser",
+            x: e.offsetX,
+            y: e.offsetY,
+            size: 20, // Adjust eraser size as needed
+          };
+          this.draw(shape);
+        }
+      },
+      { signal: this.controller.signal },
+    );
   }
 }

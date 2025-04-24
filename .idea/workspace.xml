@@ -5,8 +5,17 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="e111901c-88b2-4201-afa9-c5cd60f320ee" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/Frontend/Components/AlertPopup.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/Components/AlertPopup.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Frontend/Components/ui/AlertDiag.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/Components/ui/alert-dialog.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Frontend/Components/ui/separator.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Frontend/Components/ui/tabs.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Frontend/Components/ui/tooltip.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Frontend/Classes/DrawHandler.ts" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/Classes/DrawHandler.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Frontend/Classes/OfflineDrawHandler.ts" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/Classes/OfflineDrawHandler.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Frontend/Components/ColorDrawer.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/Components/ColorDrawer.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Frontend/Components/Whiteboard.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/Components/Whiteboard.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Frontend/Components/ui/PalleteCard.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/Components/ui/PalleteCard.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Frontend/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Frontend/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/package.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -151,6 +160,7 @@
       <workItem from="1745246388889" duration="10054000" />
       <workItem from="1745302131912" duration="7861000" />
       <workItem from="1745403694872" duration="5623000" />
+      <workItem from="1745487098418" duration="5261000" />
     </task>
     <servers />
   </component>
