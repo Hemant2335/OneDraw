@@ -8,6 +8,7 @@ import {OfflineDrawHandler} from "@/Classes/OfflineDrawHandler";
 import {AlertPopup} from "@/Components/AlertPopup";
 import {Download} from "lucide-react";
 import toast from 'react-hot-toast';
+import {DrawingPropertiesPanel} from "@/Components/ColorDrawer";
 
 const Whiteboard: React.FC<{ roomId: string }> = ({ roomId }) => {
   const [instance, setInstance] = useState<signalingManager | null>(null);
@@ -122,6 +123,7 @@ const Whiteboard: React.FC<{ roomId: string }> = ({ roomId }) => {
       </header>
       <ToolBar drawHandler={drawHandler} setTool={setTool} tool={tool} />
 
+      <DrawingPropertiesPanel drawHandler={drawHandler}/>
       <canvas
         ref={canvasRef}
         id="whiteboard"
