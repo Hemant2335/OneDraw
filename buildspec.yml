@@ -2,7 +2,7 @@ version: 0.2
 
 env:
   variables:
-    AWS_ACCOUNT_ID: "717279689524"
+    AWS_ACCOUNT_ID: "579924771643"
     AWS_REGION: "ap-south-1"
     ECR_REPO_FRONTEND: "frontend"
     ECR_REPO_BACKEND: "backend"
