@@ -1,8 +1,8 @@
-import getShapes from "@/utils/getShapes";
+import {getShapes} from "@/utils/getShapes";
 import {Tooltype} from "@/Components/ToolBar";
 import {nanoid} from "nanoid";
 
-type Shape =
+export type Shape =
   | {
       id: string;
       name: "circle";
@@ -12,6 +12,7 @@ type Shape =
       color: string;
       lineWidth: number;
       background: string;
+      lockedBy?: string;
     }
   | {
       id: string;
@@ -23,6 +24,7 @@ type Shape =
       Height: number;
       lineWidth: number;
       background: string;
+      lockedBy?: string;
     }
   | {
       id: string;
@@ -33,6 +35,7 @@ type Shape =
       endy: number;
       color: string;
       lineWidth: number;
+      lockedBy?: string;
     }
   | {
       id: string;
@@ -43,6 +46,7 @@ type Shape =
       endY: number;
       color: string;
       lineWidth: number;
+      lockedBy?: string;
     }
   | {
       id: string;
@@ -56,13 +60,9 @@ type Shape =
       color: string;
       lineWidth: number;
       background: string;
-    }
-  | {
-      name: "eraser";
-      x: number;
-      y: number;
-      size: number; // Size of the eraser
+      lockedBy?: string;
     };
+
 
 export class DrawHandler {
   private canvas: HTMLCanvasElement;
@@ -138,7 +138,7 @@ export class DrawHandler {
       }
       if (data.type === "move") {
         this.shapes = this.shapes.map((el) => {
-          if (el.name != "eraser" && el.id === shape.id) {
+          if (el.id === shape.id) {
             return shape;
           }
           return el;
@@ -461,13 +461,6 @@ export class DrawHandler {
       this.ctx.closePath();
       this.ctx.stroke();
       this.ctx.fill();
-    } else if (shape.name === "eraser") {
-      this.ctx.clearRect(
-          shape.x - shape.size / 2,
-          shape.y - shape.size / 2,
-          shape.size,
-          shape.size,
-      );
     }
 
     if (this.SelectedShape) {
@@ -499,7 +492,7 @@ export class DrawHandler {
     }
   };
 
-  SelectShape() {
+  async SelectShape() {
     const Shape = this.shapes.find((shape) => {
       if (shape.name == "rect") {
         if (
@@ -543,11 +536,14 @@ export class DrawHandler {
       return false;
     });
     if (Shape) {
-      this.SelectedShape = Shape;
-      this.clearCanvas();
-      this.shapes.forEach((shape) => {
-        this.draw(shape);
-      });
+      // Check if Shape is Not Locked
+      if(Shape.lockedBy && Shape.lockedBy){
+        this.SelectedShape = Shape;
+        this.clearCanvas();
+        this.shapes.forEach((shape) => {
+          this.draw(shape);
+        });
+      }
     } else {
       this.SelectedShape = undefined;
       this.clearCanvas();
@@ -556,6 +552,50 @@ export class DrawHandler {
       });
       this.dragStart = null;
     }
+  }
+
+  deleteShape() {
+    if(this.SelectedShape === undefined) return;
+    this.shapes = this.shapes.filter((shape => this.SelectedShape?.id !== shape.id));
+    this.clearCanvas();
+  }
+
+  copyShape() {
+    if(this.SelectedShape === undefined) return;
+    const shape = this.SelectedShape;
+    let newShape: Shape | undefined = undefined;
+    if (shape.name === "rect") {
+      newShape = {
+        ...shape,
+        id: nanoid(),
+        x: shape.x + 10,
+        y: shape.y + 10,
+      };
+    } else if (shape.name === "circle") {
+      newShape = {
+        ...shape,
+        id: nanoid(),
+        x: shape.x + 10,
+        y: shape.y + 10,
+      };
+    } else if (shape.name === "triangle") {
+      newShape = {
+        ...shape,
+        id: nanoid(),
+        x1: shape.x1 + 10,
+        y1: shape.y1 + 10,
+        x2: shape.x2 + 10,
+        y2: shape.y2 + 10,
+        x3: shape.x3 + 10,
+        y3: shape.y3 + 10,
+      };
+    }
+    if(newShape)
+    {
+      this.shapes.push(newShape);
+      this.clearCanvas();
+    }
+
   }
 
   resizeShape(mouseX: number, mouseY: number) {
@@ -719,13 +759,6 @@ export class DrawHandler {
             lineWidth : this.SelectedLineWidth,
             background: this.SelectedBackground,
           };
-        } else if (this.SelectedTool == "eraser") {
-          shape = {
-            name: "eraser",
-            x: e.offsetX,
-            y: e.offsetY,
-            size: 20, // Adjust eraser size as needed
-          };
         }
 
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -793,6 +826,8 @@ export class DrawHandler {
           this.dragStart = { x: e.offsetX, y: e.offsetY };
           return;
         }
+
+
 
         const width = e.offsetX - this.lastX;
         const height = e.offsetY - this.lastY;
@@ -873,14 +908,6 @@ export class DrawHandler {
             color: this.SelectedColor,
             lineWidth : this.SelectedLineWidth,
             background: this.SelectedBackground,
-          };
-          this.draw(shape);
-        } else if (selectedTool == "eraser") {
-          const shape: Shape = {
-            name: "eraser",
-            x: e.offsetX,
-            y: e.offsetY,
-            size: 20, // Adjust eraser size as needed
           };
           this.draw(shape);
         }

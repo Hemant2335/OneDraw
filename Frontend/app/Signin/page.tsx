@@ -3,16 +3,16 @@
 import {useState} from "react";
 import {useRouter} from "next/navigation";
 import Image from "next/image";
-import {User} from "@/store/atoms/User";
-import {useSetRecoilState} from "recoil";
+import {userAtom} from "@/store/atoms/User";
 import banner from "@/assets/banner.jpg";
+import {useSetAtom} from "jotai";
 
 
 const SignIn = () => {
     const [username, setusername] = useState<string | null>(null);
     const [Password, setPassword] = useState<string | null>(null);
     const [Warning, setWarning] = useState<string | null>(null);
-    const setUser = useSetRecoilState(User);
+    const setUser = useSetAtom(userAtom);
     const navigate = useRouter();
 
     const handlelogin = async () => {
@@ -33,7 +33,16 @@ const SignIn = () => {
             if (!data.status) {
                 return setWarning(data.error);
             }
-            setUser(data.user);
+            console.log(data.user , "User Check");
+            if(data.user.Rooms){
+                data.user.Rooms = data.user.Rooms.map((Room:any) => Room.id);
+            }
+            setUser({
+                id : data.user.id,
+                name : data.user.name,
+                username : data.user.username,
+                Rooms:  data.user.Rooms
+            });
             console.log(data);
             if(typeof window !== "undefined"){
                 localStorage.setItem("token", data.token);

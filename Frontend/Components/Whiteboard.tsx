@@ -5,43 +5,65 @@ import React, {useEffect, useRef, useState} from "react";
 import {DrawHandler} from "@/Classes/DrawHandler";
 import {ToolBar, Tooltype} from "@/Components/ToolBar";
 import {OfflineDrawHandler} from "@/Classes/OfflineDrawHandler";
-import {AlertPopup} from "@/Components/AlertPopup";
+import {AlertPopup} from "@/Components/Popup/AlertPopup";
 import {Download} from "lucide-react";
-import toast from 'react-hot-toast';
+import toast from "react-hot-toast";
 import {DrawingPropertiesPanel} from "@/Components/ColorDrawer";
+import {CollabWarningPopup} from "@/Components/Popup/CollabWarningPopup";
+import {useAtomValue} from "jotai";
+import {userAtom} from "@/store/atoms/User";
+import {useRouter} from "next/navigation";
 
 const Whiteboard: React.FC<{ roomId: string }> = ({ roomId }) => {
   const [instance, setInstance] = useState<signalingManager | null>(null);
   const [drawHandler, setDrawHandler] = useState<
     DrawHandler | OfflineDrawHandler | null
   >(null);
+  const user = useAtomValue(userAtom);
   const [tool, setTool] = useState<Tooltype>("rect");
+  const [isAutoTriggered, setIsAutoTriggered] = useState(true);
+  const [CollabWarningPopupOpen, setCollabWarningPopupOpen] = useState(false);
   const [dimensions, setDimensions] = useState({
     width: typeof window !== "undefined" ? window.innerWidth : 0,
     height: typeof window !== "undefined" ? window.innerHeight : 0,
   });
+  const router = useRouter();
 
   const canvasRef = useRef<HTMLCanvasElement>(null);
+
+  useEffect(() => {
+    handleSameRoom(true);
+  }, [roomId , router]);
+
+  const handleSameRoom = (isAutoTriggered: boolean) => {
+    console.log(user.Rooms , roomId);
+    if (!user.Rooms.includes(roomId)) {
+      setCollabWarningPopupOpen(true);
+      setIsAutoTriggered(isAutoTriggered);
+    }
+  };
 
   const handleCollaborate = () => {
     if (instance) {
       // Properly clean up existing instance
       instance.closeConnection();
       setInstance(null);
+      handleSameRoom(false);
     } else {
       // Create new instance
       const newInstance = signalingManager.getInstance(roomId);
-      if (newInstance.ws.readyState === WebSocket.CLOSED){
+      if (newInstance.ws.readyState === WebSocket.CLOSED) {
         toast.error("Connection closed");
         setInstance(null);
         return;
       }
 
       newInstance.ws.onclose = () => {
-        toast('Disconnected from Friends!', {
-          icon: '🌑',});
+        toast("Disconnected from Friends!", {
+          icon: "🌑",
+        });
         setInstance(null);
-      }
+      };
 
       setInstance(newInstance);
     }
@@ -123,12 +145,18 @@ const Whiteboard: React.FC<{ roomId: string }> = ({ roomId }) => {
       </header>
       <ToolBar drawHandler={drawHandler} setTool={setTool} tool={tool} />
 
-      <DrawingPropertiesPanel drawHandler={drawHandler}/>
+      <DrawingPropertiesPanel drawHandler={drawHandler} />
       <canvas
         ref={canvasRef}
         id="whiteboard"
         width={dimensions.width}
         height={dimensions.height}
+      />
+      <CollabWarningPopup
+        handleClick={handleCollaborate}
+        isAutoTriggered={isAutoTriggered}
+        open={CollabWarningPopupOpen}
+        setOpen={setCollabWarningPopupOpen}
       />
     </div>
   );
