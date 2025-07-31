@@ -85,8 +85,17 @@ wss.on("connection", (ws, request) => {
         if (data.type === "move") {
             const roomId = data.roomId;
             const userId = (_a = users.find((el => el.ws === ws))) === null || _a === void 0 ? void 0 : _a.userId;
-            if (!userId) {
+            if (!userId || !data.shape) {
                 return;
+            }
+            // Check if Shape is Not Locked
+            const Findshape = yield prisma.chat.findUnique({
+                where: {
+                    id: data.shape.id
+                }
+            });
+            if (Findshape && Findshape.lockedBy !== userId) {
+                return console.log("Shape is Locked by another user");
             }
             // Update the Shape in the Database
             const shape = yield prisma.chat.update({
