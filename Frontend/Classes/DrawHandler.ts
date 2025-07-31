@@ -2,7 +2,7 @@ import {getShapes} from "@/utils/getShapes";
 import {Tooltype} from "@/Components/ToolBar";
 import {nanoid} from "nanoid";
 
-type Shape =
+export type Shape =
     | {
   id: string;
   name: "circle";
@@ -58,6 +58,7 @@ type Shape =
   background: string;
 }
     | {
+  id: string;
   name: "eraser";
   x: number;
   y: number;
@@ -721,6 +722,7 @@ export class DrawHandler {
             };
           } else if (this.SelectedTool == "eraser") {
             shape = {
+              id : nanoid(),
               name: "eraser",
               x: e.offsetX,
               y: e.offsetY,
@@ -728,8 +730,6 @@ export class DrawHandler {
             };
           }
 
-          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-          // @ts-expect-error
           if (shape) {
             this.shapes.push(shape);
             this.socket.send(
@@ -877,6 +877,7 @@ export class DrawHandler {
             this.draw(shape);
           } else if (selectedTool == "eraser") {
             const shape: Shape = {
+              id: nanoid(),
               name: "eraser",
               x: e.offsetX,
               y: e.offsetY,
