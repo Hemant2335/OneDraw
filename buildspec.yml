@@ -2,7 +2,7 @@ version: 0.2
 
 env:
   variables:
-    AWS_ACCOUNT_ID: "717279689524"
+    AWS_ACCOUNT_ID: "579924771643"
     AWS_REGION: "ap-south-1"
     ECR_REPO_FRONTEND: "frontend"
     ECR_REPO_BACKEND: "backend"
@@ -30,7 +30,7 @@ phases:
 
       - echo "Logging in to Amazon ECR..."
       - echo "$CODEBUILD_WEBHOOK_EVENT"
-      - aws ecr get-login-password --region ap-south-1 | docker login --username AWS --password-stdin 717279689524.dkr.ecr.ap-south-1.amazonaws.com
+      - aws ecr get-login-password --region ap-south-1 | docker login --username AWS --password-stdin 579924771643.dkr.ecr.ap-south-1.amazonaws.com
       - IMAGE_TAG=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
 
   build:
