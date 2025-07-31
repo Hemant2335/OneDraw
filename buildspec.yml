@@ -20,6 +20,9 @@ phases:
       - curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"  # Install kubectl
       - chmod +x kubectl
       - mv kubectl /usr/local/bin/
+      - curl -LO "https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64"  # Install yq
+      - chmod +x yq_linux_amd64
+      - mv yq_linux_amd64 /usr/local/bin/yq
       - aws --version  # Verify AWS CLI is installed
       - kubectl version --client  # Verify kubectl is installed
 
