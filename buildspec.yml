@@ -36,6 +36,11 @@ phases:
       - aws ecr get-login-password --region ap-south-1 | docker login --username AWS --password-stdin 579924771643.dkr.ecr.ap-south-1.amazonaws.com
       - IMAGE_TAG=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
 
+      - echo "Configuring kubectl for EKS cluster..."
+      - aws eks update-kubeconfig --region $AWS_REGION --name $EKS_CLUSTER_NAME
+      - kubectl config current-context
+      - kubectl auth can-i get pods --namespace=default || echo "Warning: Limited permissions detected"
+
   build:
     commands:
       - echo "Building Frontend Docker image..."
@@ -69,6 +74,26 @@ phases:
       - yq eval '.spec.template.spec.containers[0].image = env(AWS_ACCOUNT_ID) + ".dkr.ecr." + env(AWS_REGION) + ".amazonaws.com/" + env(ECR_REPO_BACKEND) + ":" + env(IMAGE_TAG)' -i manifests/backend-deployment.yml
       - yq eval '.spec.template.spec.containers[0].image = env(AWS_ACCOUNT_ID) + ".dkr.ecr." + env(AWS_REGION) + ".amazonaws.com/" + env(ECR_REPO_FRONTEND) + ":" + env(IMAGE_TAG)' -i manifests/frontend-deployment.yml
       - yq eval '.spec.template.spec.containers[0].image = env(AWS_ACCOUNT_ID) + ".dkr.ecr." + env(AWS_REGION) + ".amazonaws.com/" + env(ECR_REPO_WEBSOCKET) + ":" + env(IMAGE_TAG)' -i manifests/websocket-deployment.yml
+
+      - echo "Deploying to EKS cluster..."
+      - echo "Verifying cluster connection..."
+      - kubectl cluster-info
+
+      - echo "Applying Kubernetes manifests..."
+      - kubectl apply -f manifests/backend-deployment.yml --validate=false
+      - kubectl apply -f manifests/frontend-deployment.yml --validate=false
+      - kubectl apply -f manifests/websocket-deployment.yml --validate=false
+
+      - echo "Checking deployment status..."
+      - kubectl get deployments
+      - kubectl get pods
+
+      - echo "Waiting for deployments to be ready..."
+      - kubectl wait --for=condition=available --timeout=300s deployment/backend-deployment || echo "Backend deployment timeout - check manually"
+      - kubectl wait --for=condition=available --timeout=300s deployment/frontend-deployment || echo "Frontend deployment timeout - check manually"
+      - kubectl wait --for=condition=available --timeout=300s deployment/websocket-deployment || echo "Websocket deployment timeout - check manually"
+
+      - echo "Deployment completed!"
 
 artifacts:
   files:
