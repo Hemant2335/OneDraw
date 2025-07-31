@@ -39,7 +39,6 @@ phases:
       - echo "Configuring kubectl for EKS cluster..."
       - aws eks update-kubeconfig --region $AWS_REGION --name $EKS_CLUSTER_NAME
       - kubectl config current-context
-      - kubectl auth can-i get pods --namespace=default || echo "Warning: Limited permissions detected"
 
   build:
     commands:
