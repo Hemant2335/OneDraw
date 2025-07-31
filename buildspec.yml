@@ -63,9 +63,9 @@ phases:
       - echo "Pushing Websocket Docker image to ECR..."
       - docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$ECR_REPO_WEBSOCKET:$IMAGE_TAG
       - echo "Build and push completed successfully!"
-      - sed -i "s|image:.*backend:.*|image: $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$ECR_REPO_BACKEND:$IMAGE_TAG|g" manifests/backend-deployment.yml
-      - sed -i "s|image:.*frontend:.*|image: $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$ECR_REPO_FRONTEND:$IMAGE_TAG|g" manifests/frontend-deployment.yml
-      - sed -i "s|image:.*websocket:.*|image: $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$ECR_REPO_WEBSOCKET:$IMAGE_TAG|g" manifests/websocket-deployment.yml
+      - yq eval '.spec.template.spec.containers[0].image = env(AWS_ACCOUNT_ID) + ".dkr.ecr." + env(AWS_REGION) + ".amazonaws.com/" + env(ECR_REPO_BACKEND) + ":" + env(IMAGE_TAG)' -i manifests/backend-deployment.yml
+      - yq eval '.spec.template.spec.containers[0].image = env(AWS_ACCOUNT_ID) + ".dkr.ecr." + env(AWS_REGION) + ".amazonaws.com/" + env(ECR_REPO_FRONTEND) + ":" + env(IMAGE_TAG)' -i manifests/frontend-deployment.yml
+      - yq eval '.spec.template.spec.containers[0].image = env(AWS_ACCOUNT_ID) + ".dkr.ecr." + env(AWS_REGION) + ".amazonaws.com/" + env(ECR_REPO_WEBSOCKET) + ":" + env(IMAGE_TAG)' -i manifests/websocket-deployment.yml
 
 artifacts:
   files:
