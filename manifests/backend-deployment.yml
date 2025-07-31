@@ -12,6 +12,7 @@ spec:
       labels:
         app: backend
     spec:
+      serviceAccountName: codebuild-sa
       containers:
         - name: backend
           image: 717279689524.dkr.ecr.ap-south-1.amazonaws.com/backend:067f095
