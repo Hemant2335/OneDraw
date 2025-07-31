@@ -9,46 +9,40 @@ import {AlertPopup} from "@/Components/Popup/AlertPopup";
 import {Download} from "lucide-react";
 import toast from "react-hot-toast";
 import {DrawingPropertiesPanel} from "@/Components/ColorDrawer";
-import {CollabWarningPopup} from "@/Components/Popup/CollabWarningPopup";
-import {useAtomValue} from "jotai";
-import {userAtom} from "@/store/atoms/User";
-import {useRouter} from "next/navigation";
 
 const Whiteboard: React.FC<{ roomId: string }> = ({ roomId }) => {
   const [instance, setInstance] = useState<signalingManager | null>(null);
   const [drawHandler, setDrawHandler] = useState<
     DrawHandler | OfflineDrawHandler | null
   >(null);
-  const user = useAtomValue(userAtom);
   const [tool, setTool] = useState<Tooltype>("rect");
-  const [isAutoTriggered, setIsAutoTriggered] = useState(true);
-  const [CollabWarningPopupOpen, setCollabWarningPopupOpen] = useState(false);
+  // const [isAutoTriggered, setIsAutoTriggered] = useState(true);
+  // const [CollabWarningPopupOpen, setCollabWarningPopupOpen] = useState(false);
   const [dimensions, setDimensions] = useState({
     width: typeof window !== "undefined" ? window.innerWidth : 0,
     height: typeof window !== "undefined" ? window.innerHeight : 0,
   });
-  const router = useRouter();
 
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
-  useEffect(() => {
-    handleSameRoom(true);
-  }, [roomId , router]);
-
-  const handleSameRoom = (isAutoTriggered: boolean) => {
-    console.log(user.Rooms , roomId);
-    if (!user.Rooms.includes(roomId)) {
-      setCollabWarningPopupOpen(true);
-      setIsAutoTriggered(isAutoTriggered);
-    }
-  };
+  // useEffect(() => {
+  //   handleSameRoom(true);
+  // }, [roomId , router]);
+  //
+  // const handleSameRoom = (isAutoTriggered: boolean) => {
+  //   console.log(user.Rooms , roomId);
+  //   if (!user.Rooms.includes(roomId)) {
+  //     setCollabWarningPopupOpen(true);
+  //     setIsAutoTriggered(isAutoTriggered);
+  //   }
+  // };
 
   const handleCollaborate = () => {
     if (instance) {
       // Properly clean up existing instance
       instance.closeConnection();
       setInstance(null);
-      handleSameRoom(false);
+      // handleSameRoom(false);
     } else {
       // Create new instance
       const newInstance = signalingManager.getInstance(roomId);
@@ -115,7 +109,7 @@ const Whiteboard: React.FC<{ roomId: string }> = ({ roomId }) => {
     <div className="w-[100vw] overflow-auto h-[100vh] relative hideScrollbar">
       <header className="h-14 border-b bg-white flex items-center justify-between px-4">
         <div className="flex items-center gap-2">
-          <h1 className="font-bold text-lg">CollabCanvas</h1>
+          <h1 className="font-bold text-lg">OneDraw</h1>
           <span className="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded-full">
             {instance ? "Live" : "Offline"}
           </span>
@@ -152,12 +146,12 @@ const Whiteboard: React.FC<{ roomId: string }> = ({ roomId }) => {
         width={dimensions.width}
         height={dimensions.height}
       />
-      <CollabWarningPopup
-        handleClick={handleCollaborate}
-        isAutoTriggered={isAutoTriggered}
-        open={CollabWarningPopupOpen}
-        setOpen={setCollabWarningPopupOpen}
-      />
+      {/*<CollabWarningPopup*/}
+      {/*  handleClick={handleCollaborate}*/}
+      {/*  isAutoTriggered={isAutoTriggered}*/}
+      {/*  open={CollabWarningPopupOpen}*/}
+      {/*  setOpen={setCollabWarningPopupOpen}*/}
+      {/*/>*/}
     </div>
   );
 };
