@@ -6,12 +6,6 @@
   <component name="ChangeListManager">
     <list default="true" id="e111901c-88b2-4201-afa9-c5cd60f320ee" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/WsServer/dist/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/WsServer/dist/index.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/WsServer/prisma/schema.prisma" beforeDir="false" afterPath="$PROJECT_DIR$/WsServer/prisma/schema.prisma" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/WsServer/src/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/WsServer/src/index.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/dist/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/backend/dist/index.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/prisma/schema.prisma" beforeDir="false" afterPath="$PROJECT_DIR$/backend/prisma/schema.prisma" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/index.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -176,7 +170,7 @@
       <workItem from="1750049729187" duration="47000" />
       <workItem from="1753855220740" duration="3892000" />
       <workItem from="1753897065009" duration="2117000" />
-      <workItem from="1753957015277" duration="6153000" />
+      <workItem from="1753957015277" duration="7410000" />
     </task>
     <servers />
   </component>
