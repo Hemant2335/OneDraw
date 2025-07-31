@@ -63,19 +63,9 @@ phases:
       - echo "Pushing Websocket Docker image to ECR..."
       - docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$ECR_REPO_WEBSOCKET:$IMAGE_TAG
       - echo "Build and push completed successfully!"
-      - echo "Updating Kubernetes manifests with new image tags..."
       - sed -i "s|image:.*backend:.*|image: $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$ECR_REPO_BACKEND:$IMAGE_TAG|g" manifest/backend-deployment.yml
       - sed -i "s|image:.*frontend:.*|image: $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$ECR_REPO_FRONTEND:$IMAGE_TAG|g" manifest/frontend-deployment.yml
       - sed -i "s|image:.*websocket:.*|image: $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$ECR_REPO_WEBSOCKET:$IMAGE_TAG|g" manifest/websocket-deployment.yml
-      - echo "Applying updated manifests to EKS cluster..."
-      - kubectl apply -f manifest/backend-deployment.yml
-      - kubectl apply -f manifest/frontend-deployment.yml
-      - kubectl apply -f manifest/websocket-deployment.yml
-      - echo "Checking rollout status..."
-      - kubectl rollout status deployment/backend --timeout=300s
-      - kubectl rollout status deployment/frontend --timeout=300s
-      - kubectl rollout status deployment/websocket --timeout=300s
-      - echo "Deployment completed successfully!"
 
 artifacts:
   files:
