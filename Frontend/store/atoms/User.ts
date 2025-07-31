@@ -1,11 +1,18 @@
-import { atom } from "recoil";
+import {atomWithStorage} from "jotai/utils";
 
-export const User = atom({
-    key: "User",
-    default: {
-        id : "",
-        email: "",
+interface User {
+    id: string;
+    username: string;
+    name: string;
+    Rooms: string[];
+}
+
+export const userAtom = atomWithStorage<User>(
+    "user",
+    {
+        id: "",
         username: "",
         name: "",
-    },
-})
+        Rooms: [],
+    }
+);

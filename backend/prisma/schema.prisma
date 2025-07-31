@@ -34,10 +34,13 @@ model Room {
 }
 
 model Chat {
-  id      String @id
-  roomId  String
-  message String
-  userId  String
-  room    Room   @relation(fields: [roomId], references: [id])
-  user    User   @relation(fields: [userId], references: [id])
+  id         String    @id
+  roomId     String
+  message    String
+  userId     String
+  room       Room      @relation(fields: [roomId], references: [id])
+  user       User      @relation(fields: [userId], references: [id])
+  lockedBy   String?
+  lockedAt   DateTime?
+  lockExpire DateTime?
 }

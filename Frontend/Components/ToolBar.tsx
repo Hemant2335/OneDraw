@@ -1,4 +1,4 @@
-import {Circle, LineChart, Pencil, Square, Trash, Triangle} from "lucide-react";
+import {ArrowUpLeft, Circle, Pencil, Square, Trash, Triangle} from "lucide-react";
 import React from "react";
 import {DrawHandler} from "@/Classes/DrawHandler";
 import {OfflineDrawHandler} from "@/Classes/OfflineDrawHandler";
@@ -28,7 +28,7 @@ export const ToolBar: React.FC<{
         { type: "rect", icon: <Square size={20} />, label: "Rectangle" },
         { type: "circle", icon: <Circle size={20} />, label: "Circle" },
         { type: "triangle", icon: <Triangle size={20} />, label: "Triangle" },
-        { type: "line", icon: <LineChart size={20} />, label: "Line" },
+        { type: "line", icon: <ArrowUpLeft size={20} />, label: "Line" },
     ];
 
     return (

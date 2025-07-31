@@ -5,9 +5,9 @@ import React, {useEffect, useRef, useState} from "react";
 import {DrawHandler} from "@/Classes/DrawHandler";
 import {ToolBar, Tooltype} from "@/Components/ToolBar";
 import {OfflineDrawHandler} from "@/Classes/OfflineDrawHandler";
-import {AlertPopup} from "@/Components/AlertPopup";
+import {AlertPopup} from "@/Components/Popup/AlertPopup";
 import {Download} from "lucide-react";
-import toast from 'react-hot-toast';
+import toast from "react-hot-toast";
 import {DrawingPropertiesPanel} from "@/Components/ColorDrawer";
 
 const Whiteboard: React.FC<{ roomId: string }> = ({ roomId }) => {
@@ -16,6 +16,8 @@ const Whiteboard: React.FC<{ roomId: string }> = ({ roomId }) => {
     DrawHandler | OfflineDrawHandler | null
   >(null);
   const [tool, setTool] = useState<Tooltype>("rect");
+  // const [isAutoTriggered, setIsAutoTriggered] = useState(true);
+  // const [CollabWarningPopupOpen, setCollabWarningPopupOpen] = useState(false);
   const [dimensions, setDimensions] = useState({
     width: typeof window !== "undefined" ? window.innerWidth : 0,
     height: typeof window !== "undefined" ? window.innerHeight : 0,
@@ -23,25 +25,39 @@ const Whiteboard: React.FC<{ roomId: string }> = ({ roomId }) => {
 
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
+  // useEffect(() => {
+  //   handleSameRoom(true);
+  // }, [roomId , router]);
+  //
+  // const handleSameRoom = (isAutoTriggered: boolean) => {
+  //   console.log(user.Rooms , roomId);
+  //   if (!user.Rooms.includes(roomId)) {
+  //     setCollabWarningPopupOpen(true);
+  //     setIsAutoTriggered(isAutoTriggered);
+  //   }
+  // };
+
   const handleCollaborate = () => {
     if (instance) {
       // Properly clean up existing instance
       instance.closeConnection();
       setInstance(null);
+      // handleSameRoom(false);
     } else {
       // Create new instance
       const newInstance = signalingManager.getInstance(roomId);
-      if (newInstance.ws.readyState === WebSocket.CLOSED){
+      if (newInstance.ws.readyState === WebSocket.CLOSED) {
         toast.error("Connection closed");
         setInstance(null);
         return;
       }
 
       newInstance.ws.onclose = () => {
-        toast('Disconnected from Friends!', {
-          icon: '🌑',});
+        toast("Disconnected from Friends!", {
+          icon: "🌑",
+        });
         setInstance(null);
-      }
+      };
 
       setInstance(newInstance);
     }
@@ -93,7 +109,7 @@ const Whiteboard: React.FC<{ roomId: string }> = ({ roomId }) => {
     <div className="w-[100vw] overflow-auto h-[100vh] relative hideScrollbar">
       <header className="h-14 border-b bg-white flex items-center justify-between px-4">
         <div className="flex items-center gap-2">
-          <h1 className="font-bold text-lg">CollabCanvas</h1>
+          <h1 className="font-bold text-lg">OneDraw</h1>
           <span className="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded-full">
             {instance ? "Live" : "Offline"}
           </span>
@@ -123,13 +139,19 @@ const Whiteboard: React.FC<{ roomId: string }> = ({ roomId }) => {
       </header>
       <ToolBar drawHandler={drawHandler} setTool={setTool} tool={tool} />
 
-      <DrawingPropertiesPanel drawHandler={drawHandler}/>
+      <DrawingPropertiesPanel drawHandler={drawHandler} />
       <canvas
         ref={canvasRef}
         id="whiteboard"
         width={dimensions.width}
         height={dimensions.height}
       />
+      {/*<CollabWarningPopup*/}
+      {/*  handleClick={handleCollaborate}*/}
+      {/*  isAutoTriggered={isAutoTriggered}*/}
+      {/*  open={CollabWarningPopupOpen}*/}
+      {/*  setOpen={setCollabWarningPopupOpen}*/}
+      {/*/>*/}
     </div>
   );
 };

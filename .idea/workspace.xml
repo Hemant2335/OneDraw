@@ -72,6 +72,8 @@
     &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
     &quot;dart.analysis.tool.window.visible&quot;: &quot;false&quot;,
     &quot;git-widget-placeholder&quot;: &quot;dev&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;E:/Wallet&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
@@ -86,6 +88,7 @@
 }</component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="E:\OneDraw\Frontend\Components\Popup" />
       <recent name="E:\OneDraw\Frontend" />
       <recent name="E:\OneDraw\Frontend\assets" />
     </key>
@@ -150,7 +153,24 @@
       <workItem from="1745246388889" duration="10054000" />
       <workItem from="1745302131912" duration="7861000" />
       <workItem from="1745403694872" duration="5623000" />
-      <workItem from="1745487098418" duration="7571000" />
+      <workItem from="1745487098418" duration="8921000" />
+      <workItem from="1745519915273" duration="1237000" />
+      <workItem from="1745577852436" duration="4316000" />
+      <workItem from="1745855597698" duration="3411000" />
+      <workItem from="1745863256049" duration="489000" />
+      <workItem from="1745863790999" duration="82000" />
+      <workItem from="1745863893084" duration="362000" />
+      <workItem from="1745864466449" duration="1521000" />
+      <workItem from="1745908480427" duration="3257000" />
+      <workItem from="1746092741979" duration="3299000" />
+      <workItem from="1746611311249" duration="4756000" />
+      <workItem from="1746675860498" duration="1005000" />
+      <workItem from="1747022684486" duration="9462000" />
+      <workItem from="1748514938049" duration="536000" />
+      <workItem from="1750049729187" duration="47000" />
+      <workItem from="1753855220740" duration="3892000" />
+      <workItem from="1753897065009" duration="2117000" />
+      <workItem from="1753957015277" duration="7410000" />
     </task>
     <servers />
   </component>

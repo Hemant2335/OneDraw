@@ -66,13 +66,19 @@ app.post("/backend/signIn", (req, res) => __awaiter(void 0, void 0, void 0, func
             where: {
                 username: data.data.username,
                 password: data.data.password
+            },
+            select: {
+                id: true,
+                name: true,
+                username: true,
+                Rooms: true,
             }
         });
         if (user === null) {
             return res.status(400).json({ status: false, error: "Invalid Username or Password" });
         }
         const token = jsonwebtoken_1.default.sign({ id: user.id }, "secret");
-        return res.status(200).json({ status: true, token });
+        return res.status(200).json({ status: true, token, user });
     }
     catch (e) {
         console.log("Internal Server Error : ", e);
@@ -139,6 +145,39 @@ app.get("/backend/getRoom/:slug", (req, res) => __awaiter(void 0, void 0, void 0
             return res.status(200).json({ error: "Room Not Found" });
         }
         return res.status(200).json({ room });
+    }
+    catch (e) {
+        return res.status(500).json({ error: "Internal Server Error" });
+    }
+}));
+app.get("/backend/checkIfLocked/:shapeId", middleware_1.middleware, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const shapeId = req.params.shapeId;
+    try {
+        const shape = yield prisma.chat.findUnique({
+            where: {
+                id: shapeId
+            }
+        });
+        if (shape === null) {
+            return res.status(200).json({ error: "Shape Not Found" });
+        }
+        if (shape.lockedBy && shape.lockedBy != req.body.userId) {
+            return res.status(200).json({ isLocked: true });
+        }
+        // If the shape is not locked by anyone then Lock the Shape
+        if (!shape.lockedBy) {
+            yield prisma.chat.update({
+                where: {
+                    id: shapeId
+                },
+                data: {
+                    lockedBy: req.body.userId,
+                    lockedAt: new Date(),
+                    lockExpire: new Date(Date.now() + 5 * 60 * 1000) // Lock for 5 minutes
+                }
+            });
+        }
+        return res.status(200).json({ isLocked: false });
     }
     catch (e) {
         return res.status(500).json({ error: "Internal Server Error" });

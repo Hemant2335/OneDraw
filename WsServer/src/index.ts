@@ -84,7 +84,7 @@ wss.on("connection" , (ws , request)=>{
         if(data.type === "move"){
             const  roomId = data.roomId;
             const userId = users.find((el => el.ws === ws))?.userId;
-            if(!userId){
+            if(!userId || !data.shape){
                 return ;
             }
             // Update the Shape in the Database
