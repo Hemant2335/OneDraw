@@ -87,15 +87,6 @@ wss.on("connection" , (ws , request)=>{
             if(!userId || !data.shape){
                 return ;
             }
-            // Check if Shape is Not Locked
-            const Findshape = await prisma.chat.findUnique({
-                where: {
-                    id: data.shape.id
-                }
-            })
-            if(Findshape && Findshape.lockedBy !== userId){
-                return console.log("Shape is Locked by another user");
-            }
             // Update the Shape in the Database
             const shape = await prisma.chat.update({
                 where: {
