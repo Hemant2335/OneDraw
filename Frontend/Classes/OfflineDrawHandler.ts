@@ -685,8 +685,6 @@ export class OfflineDrawHandler {
           };
         }
 
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-expect-error
         if (shape) {
           this.shapes.push(shape);
           localStorage.setItem("shapes", JSON.stringify(this.shapes));

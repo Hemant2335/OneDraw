@@ -35,7 +35,7 @@ const SignIn = () => {
             }
             console.log(data.user , "User Check");
             if(data.user.Rooms){
-                data.user.Rooms = data.user.Rooms.map((Room:any) => Room.id);
+                data.user.Rooms = data.user.Rooms.map((Room) => Room.id);
             }
             setUser({
                 id : data.user.id,

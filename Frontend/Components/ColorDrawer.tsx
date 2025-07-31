@@ -129,7 +129,7 @@ export const DrawingPropertiesPanel: React.FC<{
             {/* Actions */}
             <div className="grid grid-cols-2 gap-3 pt-2">
                 <Button
-                    onClick={() => {drawHandler?.copyShape()}}
+                    // onClick={() => {drawHandler?.copyShape()}}
                     variant="outline"
                     size="sm"
                     className="flex items-center justify-center gap-2 py-2 transition-all duration-200 hover:bg-gray-50 dark:hover:bg-gray-700"
@@ -138,7 +138,7 @@ export const DrawingPropertiesPanel: React.FC<{
                     Copy
                 </Button>
                 <Button
-                    onClick={()=>{drawHandler?.deleteShape()}}
+                    // onClick={()=>{drawHandler?.deleteShape()}}
                     variant="outline"
                     size="sm"
                     className="flex items-center justify-center gap-2 py-2 text-red-500 hover:bg-red-50 hover:border-red-200 dark:text-red-400 dark:hover:bg-red-900/20 dark:hover:border-red-800"
