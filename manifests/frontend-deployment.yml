@@ -12,6 +12,7 @@ spec:
       labels:
         app: frontend
     spec:
+      serviceAccountName: codebuild-sa
       containers:
         - name: frontend
           image: 717279689524.dkr.ecr.ap-south-1.amazonaws.com/frontend:067f095
