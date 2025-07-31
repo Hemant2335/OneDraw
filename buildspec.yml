@@ -75,8 +75,6 @@ phases:
       - yq eval '.spec.template.spec.containers[0].image = env(AWS_ACCOUNT_ID) + ".dkr.ecr." + env(AWS_REGION) + ".amazonaws.com/" + env(ECR_REPO_WEBSOCKET) + ":" + env(IMAGE_TAG)' -i manifests/websocket-deployment.yml
 
       - echo "Deploying to EKS cluster..."
-      - echo "Verifying cluster connection..."
-      - kubectl cluster-info
 
       - echo "Applying Kubernetes manifests..."
       - kubectl apply -f manifests/backend-deployment.yml --validate=false
@@ -84,13 +82,6 @@ phases:
       - kubectl apply -f manifests/websocket-deployment.yml --validate=false
 
       - echo "Checking deployment status..."
-      - kubectl get deployments
-      - kubectl get pods
-
-      - echo "Waiting for deployments to be ready..."
-      - kubectl wait --for=condition=available --timeout=300s deployment/backend-deployment || echo "Backend deployment timeout - check manually"
-      - kubectl wait --for=condition=available --timeout=300s deployment/frontend-deployment || echo "Frontend deployment timeout - check manually"
-      - kubectl wait --for=condition=available --timeout=300s deployment/websocket-deployment || echo "Websocket deployment timeout - check manually"
 
       - echo "Deployment completed!"
 
