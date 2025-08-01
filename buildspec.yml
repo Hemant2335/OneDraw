@@ -77,9 +77,9 @@ phases:
       - echo "Deploying to EKS cluster..."
 
       - echo "Applying Kubernetes manifests..."
-      - kubectl apply -f manifests/backend-deployment.yml --validate=false
-      - kubectl apply -f manifests/frontend-deployment.yml --validate=false
-      - kubectl apply -f manifests/websocket-deployment.yml --validate=false
+      - kubectl apply -f manifests/backend-deployment.yml
+      - kubectl apply -f manifests/frontend-deployment.yml
+      - kubectl apply -f manifests/websocket-deployment.yml
 
       - echo "Checking deployment status..."
 
