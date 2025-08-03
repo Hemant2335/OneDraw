@@ -20,6 +20,28 @@ const wss = new ws_1.WebSocketServer({ port: 8080 }, () => {
 });
 const users = [];
 const prisma = new client_1.PrismaClient();
+// Function to get participants in a room
+const getParticipantsInRoom = (roomId) => {
+    return users.filter(user => user.rooms.includes(roomId));
+};
+// Function to broadcast participants list to all users in a room
+const broadcastParticipants = (roomId) => {
+    const participants = getParticipantsInRoom(roomId);
+    const participantsData = participants.map(user => ({
+        userId: user.userId,
+        // You can add more user details here if needed
+    }));
+    console.log(`Broadcasting participants for room ${roomId}:`, participantsData.map(p => p.userId));
+    participants.forEach(user => {
+        if (user.ws.readyState === ws_1.WebSocket.OPEN) {
+            user.ws.send(JSON.stringify({
+                type: "participantsUpdate",
+                participants: participantsData,
+                roomId: roomId
+            }));
+        }
+    });
+};
 const CheckUser = (token) => {
     try {
         const decoded = jsonwebtoken_1.default.verify(token, "secret");
@@ -62,7 +84,7 @@ wss.on("connection", (ws, request) => {
         return ws.close();
     }
     ws.on("message", (message) => __awaiter(void 0, void 0, void 0, function* () {
-        var _a, _b;
+        var _a, _b, _c;
         let data;
         if (typeof message != "string") {
             data = JSON.parse(message.toString());
@@ -74,6 +96,8 @@ wss.on("connection", (ws, request) => {
             const user = users.find((el => el.ws === ws));
             console.log("joinroom", user, data);
             user === null || user === void 0 ? void 0 : user.rooms.push(data.roomId);
+            // Broadcast updated participants list to all users in the room
+            broadcastParticipants(data.roomId);
         }
         if (data.type === "leaveRoom") {
             const user = users.find((el => el.ws === ws));
@@ -81,6 +105,8 @@ wss.on("connection", (ws, request) => {
                 return;
             }
             user.rooms = user === null || user === void 0 ? void 0 : user.rooms.filter((el => el !== data.roomId));
+            // Broadcast updated participants list to all users in the room
+            broadcastParticipants(data.roomId);
         }
         if (data.type === "move") {
             const roomId = data.roomId;
@@ -152,5 +178,47 @@ wss.on("connection", (ws, request) => {
                 console.log(e);
             }
         }
+        // Handle cursor movement
+        if (data.type === "cursorMove") {
+            const roomId = data.roomId;
+            const userId = (_c = users.find((el) => el.ws === ws)) === null || _c === void 0 ? void 0 : _c.userId;
+            if (!roomId || !userId) {
+                return;
+            }
+            // Broadcast cursor position to all users in the room (except sender)
+            users.forEach((el) => {
+                if (el.rooms.includes(roomId) && el.userId !== userId) {
+                    if (el.ws.readyState === ws_1.WebSocket.OPEN) {
+                        el.ws.send(JSON.stringify({
+                            type: "cursorMove",
+                            userId: userId,
+                            x: data.x,
+                            y: data.y,
+                            roomId: roomId
+                        }));
+                    }
+                }
+            });
+        }
     }));
+    // Handle user disconnection
+    ws.on("close", () => {
+        const user = users.find((el) => el.ws === ws);
+        if (user) {
+            console.log(`User ${user.userId} disconnected from rooms:`, user.rooms);
+            // Store the rooms the user was in before removing them
+            const userRooms = [...user.rooms];
+            // Remove user from users array FIRST
+            const userIndex = users.findIndex((el) => el.ws === ws);
+            if (userIndex !== -1) {
+                users.splice(userIndex, 1);
+                console.log(`Removed user ${user.userId} from users array. Remaining users:`, users.length);
+            }
+            // THEN broadcast participants update for all rooms the user was in
+            userRooms.forEach(roomId => {
+                console.log(`Broadcasting participants update for room ${roomId}`);
+                broadcastParticipants(roomId);
+            });
+        }
+    });
 });

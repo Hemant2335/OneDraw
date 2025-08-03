@@ -5,6 +5,7 @@ export class signalingManager {
     roomId: string;
     ws: WebSocket;
     isConnected: boolean = false;
+    onParticipantsUpdate?: (participants: any[]) => void;
 
     constructor(roomId : string) {
         this.roomId = roomId;
@@ -34,7 +35,5 @@ export class signalingManager {
             signalingManager.instance.ws.close();
             signalingManager.instance = null;
         }
-
     }
-
 }
