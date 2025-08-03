@@ -1,17 +1,12 @@
 "use client";
 
-import React, { useEffect, useState } from 'react';
-import { Avatar, AvatarFallback, AvatarImage } from "@/Components/ui/avatar";
-import { Badge } from "@/Components/ui/badge";
-import { Card, CardContent, CardHeader, CardTitle } from "@/Components/ui/card";
-import { Users, User } from "lucide-react";
-import UserFetcher, { User as UserType } from "@/utils/userFetcher";
+import React, {useEffect, useState} from 'react';
+import {Avatar, AvatarFallback, AvatarImage} from "@/Components/ui/avatar";
+import {Badge} from "@/Components/ui/badge";
+import {Card, CardContent, CardHeader, CardTitle} from "@/Components/ui/card";
+import {User, Users} from "lucide-react";
+import UserFetcher, {User as UserType} from "@/utils/userFetcher";
 
-interface Participant {
-  userId: string;
-  name?: string;
-  username?: string;
-}
 
 interface ParticipantsProps {
   participants: string[];

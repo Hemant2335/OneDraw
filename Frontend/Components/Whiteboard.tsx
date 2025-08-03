@@ -20,7 +20,6 @@ const Whiteboard: React.FC<{ roomId: string }> = ({ roomId }) => {
   >(null);
   const [tool, setTool] = useState<Tooltype>("rect");
   const [participants, setParticipants] = useState<string[]>([]);
-  const [showParticipants, setShowParticipants] = useState(false);
   // const [isAutoTriggered, setIsAutoTriggered] = useState(true);
   // const [CollabWarningPopupOpen, setCollabWarningPopupOpen] = useState(false);
   const [dimensions, setDimensions] = useState({
