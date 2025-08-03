@@ -11,6 +11,10 @@
   color: rgba(255, 255, 255, 0.87);
   background-color: black;
   font-family: Poppins, sans-serif;
+  --cursor-bg: #ffffff;
+  --cursor-border: #374151;
+  --cursor-shadow: rgba(0, 0, 0, 0.15);
+  --cursor-user-colors: #ef4444, #3b82f6, #10b981, #eab308, #8b5cf6, #ec4899;
 }
 
 @layer utilities {
@@ -22,6 +26,25 @@
   .no-scrollbar {
     -ms-overflow-style: none;  /* IE and Edge */
     scrollbar-width: none;  /* Firefox */
+  }
+}
+
+[data-theme="dark"] {
+  --cursor-bg: #1f2937;
+  --cursor-border: #d1d5db;
+  --cursor-shadow: rgba(0, 0, 0, 0.3);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cursor-canvas {
+    animation: none !important;
+  }
+}
+
+@media (prefers-contrast: high) {
+  :root {
+    --cursor-border: #000000;
+    --cursor-bg: #ffffff;
   }
 }
 

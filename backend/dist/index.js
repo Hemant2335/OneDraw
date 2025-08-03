@@ -34,6 +34,61 @@ const signInType = zod_1.z.object({
     username: zod_1.z.string().min(3).max(20),
     password: zod_1.z.string().min(8),
 });
+// Get User Details by ID
+app.get("/backend/getUser/:userId", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const userId = req.params.userId;
+    if (!userId) {
+        return res.status(400).json({ error: "User ID is required" });
+    }
+    try {
+        const user = yield prisma.user.findUnique({
+            where: {
+                id: userId
+            },
+            select: {
+                id: true,
+                name: true,
+                username: true,
+                // Exclude password for security
+            }
+        });
+        if (!user) {
+            return res.status(404).json({ error: "User not found" });
+        }
+        return res.status(200).json({ user });
+    }
+    catch (e) {
+        console.log("Error fetching user:", e);
+        return res.status(500).json({ error: "Internal Server Error" });
+    }
+}));
+// Get Multiple Users by IDs
+app.post("/backend/getUsers", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { userIds } = req.body;
+    if (!userIds || !Array.isArray(userIds)) {
+        return res.status(400).json({ error: "User IDs array is required" });
+    }
+    try {
+        const users = yield prisma.user.findMany({
+            where: {
+                id: {
+                    in: userIds
+                }
+            },
+            select: {
+                id: true,
+                name: true,
+                username: true,
+                // Exclude password for security
+            }
+        });
+        return res.status(200).json({ users });
+    }
+    catch (e) {
+        console.log("Error fetching users:", e);
+        return res.status(500).json({ error: "Internal Server Error" });
+    }
+}));
 // Sign up
 app.post("/backend/signUp", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const data = user_1.UserSchema.safeParse(req.body);

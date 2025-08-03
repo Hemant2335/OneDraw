@@ -15,6 +15,32 @@ interface User {
 const users : User[] = [];
 const prisma  = new PrismaClient();
 
+// Function to get participants in a room
+const getParticipantsInRoom = (roomId: string) => {
+    return users.filter(user => user.rooms.includes(roomId));
+};
+
+// Function to broadcast participants list to all users in a room
+const broadcastParticipants = (roomId: string) => {
+    const participants = getParticipantsInRoom(roomId);
+    const participantsData = participants.map(user => ({
+        userId: user.userId,
+        // You can add more user details here if needed
+    }));
+
+    console.log(`Broadcasting participants for room ${roomId}:`, participantsData.map(p => p.userId));
+
+    participants.forEach(user => {
+        if (user.ws.readyState === WebSocket.OPEN) {
+            user.ws.send(JSON.stringify({
+                type: "participantsUpdate",
+                participants: participantsData,
+                roomId: roomId
+            }));
+        }
+    });
+};
+
 const CheckUser = (token : string) =>{
     try{
         const decoded = jwt.verify(token , "secret");
@@ -71,6 +97,9 @@ wss.on("connection" , (ws , request)=>{
            const user = users.find((el => el.ws === ws));
            console.log("joinroom" , user , data);
            user?.rooms.push(data.roomId);
+           
+           // Broadcast updated participants list to all users in the room
+           broadcastParticipants(data.roomId);
         }
 
         if(data.type === "leaveRoom"){
@@ -79,6 +108,9 @@ wss.on("connection" , (ws , request)=>{
                 return ;
             }
             user.rooms = user?.rooms.filter((el => el !== data.roomId));
+            
+            // Broadcast updated participants list to all users in the room
+            broadcastParticipants(data.roomId);
         }
 
         if(data.type === "move"){
@@ -162,8 +194,58 @@ wss.on("connection" , (ws , request)=>{
                 console.log(e);
             }
         }
+
+        // Handle cursor movement
+        if (data.type === "cursorMove") {
+            const roomId = data.roomId;
+            const userId = users.find((el) => el.ws === ws)?.userId;
+            
+            if (!roomId || !userId) {
+                return;
+            }
+
+            // Broadcast cursor position to all users in the room (except sender)
+            users.forEach((el) => {
+                if (el.rooms.includes(roomId) && el.userId !== userId) {
+                    if (el.ws.readyState === WebSocket.OPEN) {
+                        el.ws.send(
+                            JSON.stringify({
+                                type: "cursorMove",
+                                userId: userId,
+                                x: data.x,
+                                y: data.y,
+                                roomId: roomId
+                            })
+                        );
+                    }
+                }
+            });
+        }
     })
 
+    // Handle user disconnection
+    ws.on("close", () => {
+        const user = users.find((el) => el.ws === ws);
+        if (user) {
+            console.log(`User ${user.userId} disconnected from rooms:`, user.rooms);
+            
+            // Store the rooms the user was in before removing them
+            const userRooms = [...user.rooms];
+            
+            // Remove user from users array FIRST
+            const userIndex = users.findIndex((el) => el.ws === ws);
+            if (userIndex !== -1) {
+                users.splice(userIndex, 1);
+                console.log(`Removed user ${user.userId} from users array. Remaining users:`, users.length);
+            }
+            
+            // THEN broadcast participants update for all rooms the user was in
+            userRooms.forEach(roomId => {
+                console.log(`Broadcasting participants update for room ${roomId}`);
+                broadcastParticipants(roomId);
+            });
+        }
+    });
 
 })
 

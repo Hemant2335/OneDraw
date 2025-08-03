@@ -63,6 +63,10 @@ export class OfflineDrawHandler {
     this.SelectedLineWidth = width;
   }
 
+  public getParticipants() {
+    return [];
+  }
+
   selectBackground(color: string) {
     this.SelectedBackground = color;
   }

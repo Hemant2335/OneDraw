@@ -9,6 +9,9 @@ import {AlertPopup} from "@/Components/Popup/AlertPopup";
 import {Download} from "lucide-react";
 import toast from "react-hot-toast";
 import {DrawingPropertiesPanel} from "@/Components/ColorDrawer";
+import Participants from "@/Components/Participants";
+import {useAtomValue} from "jotai";
+import {userAtom} from "@/store/atoms/User";
 
 const Whiteboard: React.FC<{ roomId: string }> = ({ roomId }) => {
   const [instance, setInstance] = useState<signalingManager | null>(null);
@@ -16,6 +19,8 @@ const Whiteboard: React.FC<{ roomId: string }> = ({ roomId }) => {
     DrawHandler | OfflineDrawHandler | null
   >(null);
   const [tool, setTool] = useState<Tooltype>("rect");
+  const [participants, setParticipants] = useState<string[]>([]);
+  const [showParticipants, setShowParticipants] = useState(false);
   // const [isAutoTriggered, setIsAutoTriggered] = useState(true);
   // const [CollabWarningPopupOpen, setCollabWarningPopupOpen] = useState(false);
   const [dimensions, setDimensions] = useState({
@@ -23,6 +28,7 @@ const Whiteboard: React.FC<{ roomId: string }> = ({ roomId }) => {
     height: typeof window !== "undefined" ? window.innerHeight : 0,
   });
 
+  const user = useAtomValue(userAtom);
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   // useEffect(() => {
@@ -57,6 +63,7 @@ const Whiteboard: React.FC<{ roomId: string }> = ({ roomId }) => {
           icon: "🌑",
         });
         setInstance(null);
+        setParticipants([]);
       };
 
       setInstance(newInstance);
@@ -97,6 +104,14 @@ const Whiteboard: React.FC<{ roomId: string }> = ({ roomId }) => {
     const newHandler = instance
       ? new DrawHandler(canvasRef.current, roomId, instance.ws)
       : new OfflineDrawHandler(canvasRef.current);
+
+    // Set up participants callback for DrawHandler
+    if (instance && newHandler instanceof DrawHandler) {
+      newHandler.setParticipantsCallback((participants) => {
+        console.log("Whiteboard: Received participants update", participants);
+        setParticipants(participants);
+      });
+    }
 
     setDrawHandler(newHandler);
 
@@ -140,6 +155,18 @@ const Whiteboard: React.FC<{ roomId: string }> = ({ roomId }) => {
       <ToolBar drawHandler={drawHandler} setTool={setTool} tool={tool} />
 
       <DrawingPropertiesPanel drawHandler={drawHandler} />
+      
+              {/* Participants Panel */}
+        {instance && (
+          <div className="absolute top-20 right-4 z-50">
+            <Participants 
+              participants={participants}
+              currentUserId={user.id}
+              isCollabMode={!!instance}
+            />
+          </div>
+        )}
+      
       <canvas
         ref={canvasRef}
         id="whiteboard"
