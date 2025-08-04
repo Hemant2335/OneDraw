@@ -15,6 +15,14 @@ spec:
       serviceAccountName: codebuild-sa
       containers:
         - name: websocket
-          image: 717279689524.dkr.ecr.ap-south-1.amazonaws.com/websocket:067f095
+          image: 579924771643.dkr.ecr.ap-south-1.amazonaws.com/websocket:ccd4f3c
           ports:
             - containerPort: 8080
+          volumeMounts:
+            - name: websocket-env-volume
+              mountPath: /src/.env
+              subPath: .env
+      volumes:
+        - name: websocket-env-volume
+          configMap:
+            name: websocket-config
