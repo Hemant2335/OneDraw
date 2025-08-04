@@ -12,6 +12,7 @@ spec:
       labels:
         app: websocket
     spec:
+      serviceAccountName: codebuild-sa
       containers:
         - name: websocket
           image: 579924771643.dkr.ecr.ap-south-1.amazonaws.com/websocket:ccd4f3c
