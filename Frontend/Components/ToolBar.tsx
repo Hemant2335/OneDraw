@@ -1,10 +1,10 @@
-import {ArrowUpLeft, Circle, Pencil, Square, Trash, Triangle} from "lucide-react";
+import {ArrowUpLeft, Circle, Pencil, Square, Trash, Triangle, Move} from "lucide-react";
 import React from "react";
 import {DrawHandler} from "@/Classes/DrawHandler";
 import {OfflineDrawHandler} from "@/Classes/OfflineDrawHandler";
 import {BsCursor} from "react-icons/bs";
 
-export type Tooltype = "pen" | "circle" | "rect" | "line" | "triangle" | "eraser" | "cursor";
+export type Tooltype = "pen" | "circle" | "rect" | "line" | "triangle" | "eraser" | "cursor" | "pan";
 
 export const ToolBar: React.FC<{
     drawHandler: DrawHandler | OfflineDrawHandler | null;
@@ -23,6 +23,7 @@ export const ToolBar: React.FC<{
     };
 
     const tools = [
+        { type: "pan", icon: <Move size={20} />, label: "Pan" },
         { type: "cursor", icon: <BsCursor size={20} />, label: "Select" },
         { type: "pen", icon: <Pencil size={20} />, label: "Pen" },
         { type: "rect", icon: <Square size={20} />, label: "Rectangle" },
